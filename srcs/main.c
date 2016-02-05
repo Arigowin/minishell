@@ -8,8 +8,9 @@ char	**readline()
 {
 	char	*line;
 
-	get_next_line(0, &line);
-	return (ft_strsplit(line, ' '));
+	if (get_next_line(0, &line) != -1 && line[0] != '\0')
+		return (ft_strsplit(line, ' '));
+	return (NULL);
 }
 
 int		body(char **env)
@@ -19,11 +20,12 @@ int		body(char **env)
 	char	*tmp;
 	int		ret_exec;
 
-	t = readline();
+	if ((t = readline()) == NULL)
+		return (TRUE);
 	if (strcmp(t[0], "exit") == 0)
 	{
-		printf("%s\n", t[0]);
-		exit (0);
+		ft_putendl(t[0]);
+		return (FALSE);
 	}
 	paths = get_env("PATH", env);
 	if ((tmp = search_exe(paths, t[0])) == NULL)
