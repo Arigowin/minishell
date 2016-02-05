@@ -15,7 +15,10 @@ LIBHPATH =	$(LIBPATH)/includes
 CFLAGS = -Wall -Werror -Wextra -I $(HPATH) -I $(LIBHPATH)
 LIBS = -L $(LIBPATH) -lft
 
-SRC = main.c
+SRC = main.c \
+	  execprog.c \
+	  path.c \
+	  error.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 
