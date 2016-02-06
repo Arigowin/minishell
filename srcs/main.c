@@ -13,6 +13,33 @@ char	**readline()
 	return (NULL);
 }
 
+void	replace_tilde(char **paths, char **env)
+{
+	char	**home;
+	int		i;
+
+	i = 0;
+	while (paths[i])
+	{
+		if (ft_strstr(paths[i], "~+"))
+		{
+			free(paths[i]);
+			home = get_env("PWD", env);
+			paths[i] = ft_strnew(ft_strlen(home[0]));
+			paths[i] = ft_strdup(home[0]);
+			i++;
+		}
+		else if (ft_strstr(paths[i], "~") != NULL)
+		{
+			free(paths[i]);
+			home = get_env("HOME", env);
+			paths[i] = ft_strnew(ft_strlen(home[0]));
+			paths[i] = ft_strdup(home[0]);
+		}
+		i++;
+	}
+}
+
 int		body(char **env)
 {
 	char	**t;
@@ -27,11 +54,13 @@ int		body(char **env)
 		ft_putendl(t[0]);
 		return (FALSE);
 	}
-	paths = get_env("PATH", env);
+	if ((paths = get_env("PATH", env)) == NULL)
+		return (ft_error("PATH not found ", t[0], TRUE));
 	if ((tmp = search_exe(paths, t[0])) == NULL)
 		return (ft_error("command not found: ", t[0], TRUE));
 	if ((tmp = format_path_exe(tmp, t[0])) == NULL)
 		return (TRUE);
+	replace_tilde(t, env);
 	if ((ret_exec = execprog(tmp, t, NULL)) == -1)
 		return (ft_error("exec format error: ", t[0], TRUE));
 	return (TRUE);
