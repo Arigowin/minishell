@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "minishell.h"
 
-bool	ft_error(char *str, char *exe, bool ret)
+t_bool	ft_error(char *str, char *exe, t_bool ret)
 {
 
 #ifdef DEBUG

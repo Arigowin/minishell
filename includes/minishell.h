@@ -6,13 +6,16 @@
 # define FALSE 0
 //#define DEBUG
 
-typedef char bool;
+typedef char	t_bool;
 
 int			execprog(char *cmd, char **arg, char **env);
 char		**get_env(char *name, char **env);
 char		*format_path_exe(char *path, char *cmd);
 char		*search_exe(char **paths, char *exe);
-bool		ft_error(char *str, char *exe, bool ret);
+t_bool		ft_error(char *str, char *exe, t_bool ret);
+void		ft_tab_to_space(char **str);
+char		**readline(void);
+t_bool		replace_tilde(char **paths, char **env);
 
 #endif
 

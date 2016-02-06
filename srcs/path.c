@@ -29,7 +29,7 @@ char	**get_env(char *name, char **env)
 	char	*tmp;
 	int		i;
 	int		len;
-	bool	b;
+	t_bool	b;
 
 	i = 0;
 	ret = NULL;
@@ -90,7 +90,7 @@ char	*search_exe(char **paths, char *exe)
 	struct dirent	*dp;
 	DIR				*dir;
 	int				i;
-	bool			b;
+	t_bool			b;
 
 	i = 0;
 	b = FALSE;

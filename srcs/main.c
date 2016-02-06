@@ -1,87 +1,50 @@
 #include "minishell.h"
 #include "libft.h"
-#include "get_next_line.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
-void	ft_tab_to_space(char **str)
+// cd
+// cd -		=> OLDPWD
+// cd		=> PWD
+// cd libft includes => cd libft ; cd includes
+t_bool	change_directory(char **cmd)
 {
+	char	*t[2] = {".", NULL};
 	int		i;
 
 	i = 0;
-	while ((*str)[i])
-	{
-		if ((*str)[i] == '\t')
-			(*str)[i] = ' ';
+	while (cmd[i])
 		i++;
-	}
-}
-
-char	**readline()
-{
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : readline");
-#endif
-
-	char	*line;
-	char	*tmp;
-
-	if (get_next_line(0, &line) != -1 && line[0] != '\0')
+	if (i > 3)
+		return (ft_error("too many arguments", NULL, TRUE));
+	i = 1;
+	while (cmd[i])
 	{
-		if ((tmp = ft_strtrim(line)) == NULL)
-			return (NULL);
-		ft_tab_to_space(&tmp);
-		ft_strdel(&line);
-		return (ft_strsplit(tmp, ' '));
-	}
-	return (NULL);
-}
-
-bool	replace_tilde(char **paths, char **env)
-{
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : replace_tilde");
-#endif
-
-	char	**home;
-	int		i;
-
-	i = 0;
-	while (paths[i])
-	{
-		if (ft_strequ(paths[i], "~-"))
-		{
-			ft_strdel(&paths[i]);
-			home = get_env("OLDPWD", env);
-			if ((paths[i] = ft_strnew(ft_strlen(home[0]))) == NULL)
-				return (ft_error("strnew replace_tilde", paths[i], FALSE));
-			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error("strdup replace tilde", paths[i], FALSE));
-		}
-		else if (ft_strequ(paths[i], "~+"))
-		{
-			ft_strdel(&paths[i]);
-			home = get_env("PWD", env);
-			if ((paths[i] = ft_strnew(ft_strlen(home[0]))) == NULL)
-				return (ft_error("strnew replace_tilde", paths[i], FALSE));
-			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error("strdup replace tilde", paths[i], FALSE));
-		}
-		else if (ft_strequ(paths[i], "~"))
-		{
-			ft_strdel(&paths[i]);
-			home = get_env("HOME", env);
-			if ((paths[i] = ft_strnew(ft_strlen(home[0]))) == NULL)
-				return (ft_error("strnew replace_tilde", paths[i], FALSE));
-			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error("strdup replace tilde", paths[i], FALSE));
-		}
+		// a ramplacer par une autre fonction qui accepte les ../..
+		if (search_exe(t, cmd[i]) == NULL)
+			return (ft_error("no such file or directory: ", cmd[i], TRUE));
+		if (chdir(cmd[i]) == -1)
+			return (FALSE);
 		i++;
 	}
 	return (TRUE);
 }
+
+// env
+void	print_env(char **env)
+{
+	int i;
+
+	i = 0;
+	while (env[i])
+	{
+		ft_putendl(env[i]);
+		i++;
+	}
+}
+// setenv
+// unsetenv
 
 int		body(char **env)
 {
@@ -102,27 +65,34 @@ int		body(char **env)
 		ft_putendl("exit");
 		return (FALSE);
 	}
+	if (replace_tilde(t, env) == FALSE)
+		return (FALSE);
+	else if (ft_strequ(t[0], "cd"))
+		return (change_directory(t));
+	else if (ft_strequ(t[0], "env"))
+	{
+		print_env(env);
+		return (TRUE);
+	}
 	if ((paths = get_env("PATH", env)) == NULL)
 		return (ft_error("PATH not found ", t[0], TRUE));
 	if ((tmp = search_exe(paths, t[0])) == NULL)
 		return (ft_error("command not found: ", t[0], TRUE));
 	if ((tmp = format_path_exe(tmp, t[0])) == NULL)
 		return (TRUE);
-	if (replace_tilde(t, env) == FALSE)
-		return (FALSE);
 	if ((ret_exec = execprog(tmp, t, NULL)) == -1)
 		return (ft_error("exec format error: ", t[0], TRUE));
 	return (TRUE);
 }
 
-int main(int ac, char **av, char **env)
+int		main(int ac, char **av, char **env)
 {
 
 #ifdef DEBUG
 	ft_putendl("DEBUG : START");
 #endif
 
-	bool	b;
+	t_bool	b;
 
 	if (ac == 1)
 	{

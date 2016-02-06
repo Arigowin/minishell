@@ -18,7 +18,8 @@ LIBS = -L $(LIBPATH) -lft
 SRC = main.c \
 	  execprog.c \
 	  path.c \
-	  error.c
+	  error.c \
+	  command_line.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 
