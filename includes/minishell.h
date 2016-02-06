@@ -4,6 +4,7 @@
 
 # define TRUE 1
 # define FALSE 0
+//#define DEBUG
 
 typedef char bool;
 

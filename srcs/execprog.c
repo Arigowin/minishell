@@ -4,6 +4,12 @@
 
 int		execprog(char *cmd, char **arg, char **env)
 {
+
+#ifdef DEBUG
+#include "libft.h"
+	ft_putendl("DEBUG : execprog");
+#endif
+
 	pid_t	father;
 	int		ret;
 

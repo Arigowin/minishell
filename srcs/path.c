@@ -5,6 +5,11 @@
 
 int		len_to_equal(char *str)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : len_to_equal");
+#endif
+
 	size_t	i;
 
 	i = 0;
@@ -15,6 +20,11 @@ int		len_to_equal(char *str)
 
 char	**get_env(char *name, char **env)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : get_env");
+#endif
+
 	char	**ret;
 	char	*tmp;
 	int		i;
@@ -49,6 +59,11 @@ char	**get_env(char *name, char **env)
 
 char	*format_path_exe(char *path, char *cmd)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : format_path_exe");
+#endif
+
 	char	*tmp;
 	char	*ret;
 
@@ -67,6 +82,11 @@ char	*format_path_exe(char *path, char *cmd)
 
 char	*search_exe(char **paths, char *exe)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : search_exe");
+#endif
+
 	struct dirent	*dp;
 	DIR				*dir;
 	int				i;
