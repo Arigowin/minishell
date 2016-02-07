@@ -53,8 +53,6 @@ t_bool	replace_tilde(char **paths, char **env)
 		{
 			ft_strdel(&paths[i]);
 			home = get_env("OLDPWD", env);
-			if ((paths[i] = ft_strnew(ft_strlen(home[0]))) == NULL)
-				return (ft_error("strnew replace_tilde", paths[i], FALSE));
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error("strdup replace tilde", paths[i], FALSE));
 		}
@@ -62,8 +60,6 @@ t_bool	replace_tilde(char **paths, char **env)
 		{
 			ft_strdel(&paths[i]);
 			home = get_env("PWD", env);
-			if ((paths[i] = ft_strnew(ft_strlen(home[0]))) == NULL)
-				return (ft_error("strnew replace_tilde", paths[i], FALSE));
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error("strdup replace tilde", paths[i], FALSE));
 		}
@@ -71,8 +67,6 @@ t_bool	replace_tilde(char **paths, char **env)
 		{
 			ft_strdel(&paths[i]);
 			home = get_env("HOME", env);
-			if ((paths[i] = ft_strnew(ft_strlen(home[0]))) == NULL)
-				return (ft_error("strnew replace_tilde", paths[i], FALSE));
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error("strdup replace tilde", paths[i], FALSE));
 		}

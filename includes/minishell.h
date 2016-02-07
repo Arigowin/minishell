@@ -4,6 +4,7 @@
 
 # define TRUE 1
 # define FALSE 0
+# define BUFF_S 1024
 //#define DEBUG
 
 typedef char	t_bool;
@@ -16,6 +17,7 @@ t_bool		ft_error(char *str, char *exe, t_bool ret);
 void		ft_tab_to_space(char **str);
 char		**readline(void);
 t_bool		replace_tilde(char **paths, char **env);
+int			len_to_equal(char *str);
 
 #endif
 
