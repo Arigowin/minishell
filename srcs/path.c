@@ -22,7 +22,8 @@ char	**get_env(char *name, char **env)
 {
 
 #ifdef DEBUG
-	ft_putendl("DEBUG : get_env");
+	ft_putstr("DEBUG : get_env : ");
+	ft_putendl(name);
 #endif
 
 	char	**ret;
@@ -34,7 +35,7 @@ char	**get_env(char *name, char **env)
 	i = 0;
 	ret = NULL;
 	b = FALSE;
-	while (env[i])
+	while (env[i] && env[i][0])
 	{
 		len = len_to_equal(env[i]);
 		tmp = ft_strsub(env[i], 0, len - 1);

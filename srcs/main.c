@@ -6,10 +6,17 @@
 
 t_bool	replace_minus(char **paths, char **env)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : replace_minus");
+#endif
+
 	char	**oldpwd;
 	int		i;
+	char	*tmp;
 
 	i = 0;
+	tmp = NULL;
 	while (paths[i])
 	{
 		if (ft_strequ(paths[i], "-"))
@@ -18,14 +25,22 @@ t_bool	replace_minus(char **paths, char **env)
 			oldpwd = get_env("OLDPWD", env);
 			if ((paths[i] = ft_strdup(oldpwd[0])) == NULL)
 				return (ft_error("strdup replace_minus", paths[i], FALSE));
+			tmp = paths[i];
 		}
 		i++;
 	}
+	if (tmp != NULL)
+		ft_putendl(tmp);
 	return (TRUE);
 }
 
 t_bool	set_env(char *name, char **env, char *str)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : set_env");
+#endif
+
 	char	*tmp;
 	int		i;
 	int		len;
@@ -33,7 +48,7 @@ t_bool	set_env(char *name, char **env, char *str)
 
 	i = 0;
 	b = FALSE;
-	while (env[i] && !b)
+	while (env[i] && env[i][0] && !b)
 	{
 		len = len_to_equal(env[i]);
 		tmp = ft_strsub(env[i], 0, len);
@@ -46,6 +61,12 @@ t_bool	set_env(char *name, char **env, char *str)
 		ft_strdel(&tmp);
 		i++;
 	}
+	if (!b)
+	{
+		tmp = ft_strjoin(name, "=");
+		env[i] = ft_strjoin(tmp, str);
+		b = TRUE;
+	}
 	return (b);
 }
 
@@ -54,6 +75,11 @@ t_bool	set_env(char *name, char **env, char *str)
 // cd libft a => cd: string not in pwd: libft
 t_bool	change_directory(char **cmd, char **env)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : change_directory");
+#endif
+
 	int		i;
 	char	buff[BUFF_S];
 	char	**tmp;
@@ -68,7 +94,11 @@ t_bool	change_directory(char **cmd, char **env)
 		return (FALSE);
 	if (cmd[1] == NULL)
 	{
-		tmp = get_env("HOME", env);
+		if ((tmp = get_env("HOME", env)) == NULL)
+		{
+			ft_putendl("cd: No home directory.");
+			return (TRUE);
+		}
 		if (chdir(tmp[0]) == -1)
 			return (FALSE);
 	}
@@ -82,7 +112,6 @@ t_bool	change_directory(char **cmd, char **env)
 		i++;
 	}
 	getcwd(buff, BUFF_S);
-	ft_putendl(buff);
 	tmp = get_env("PWD", env);
 	set_env("OLDPWD", env, tmp[0]);
 	set_env("PWD", env, buff);
@@ -92,10 +121,15 @@ t_bool	change_directory(char **cmd, char **env)
 // env
 void	print_env(char **env)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : print_env");
+#endif
+
 	int i;
 
 	i = 0;
-	while (env[i])
+	while (env[i] && env[i][0])
 	{
 		ft_putendl(env[i]);
 		i++;
@@ -103,6 +137,17 @@ void	print_env(char **env)
 }
 // setenv
 // unsetenv
+
+void	verif_env(char **env)
+{
+	char	buff[BUFF_S];
+
+	getcwd(buff, BUFF_S);
+	if (get_env("PWD", env) == NULL)
+		set_env("PWD", env, buff);
+	if (get_env("OLDPWD", env) == NULL)
+		set_env("OLDPWD", env, buff);
+}
 
 int		body(char **env)
 {
@@ -116,6 +161,7 @@ int		body(char **env)
 	char	*tmp;
 	int		ret_exec;
 
+	verif_env(env);
 	if ((t = readline()) == NULL)
 		return (TRUE);
 	if (ft_strequ(t[0], "exit"))
