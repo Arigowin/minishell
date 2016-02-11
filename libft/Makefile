@@ -6,7 +6,7 @@
 #    By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/11/23 13:01:21 by dolewski          #+#    #+#              #
-#    Updated: 2016/02/03 17:04:26 by dolewski         ###   ########.fr        #
+#    Updated: 2016/02/11 11:16:44 by dolewski         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -94,6 +94,8 @@ SRC = ft_memalloc.c \
 	  ft_bzero.c \
 	  ft_itoa_base.c \
 	  ft_itoa.c \
+	  ft_copyt2d.c \
+	  ft_freet2d.c \
 	  get_next_line.c
 
 OBJ = $(patsubst %.c, $(OPATH)/%.o, $(SRC))

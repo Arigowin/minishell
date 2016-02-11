@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/23 13:02:00 by dolewski          #+#    #+#             */
-/*   Updated: 2016/01/25 16:32:35 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/02/11 11:16:47 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +130,7 @@ char				*ft_itoa_base(int n, int base);
 char				*ft_itoa(int n);
 int					ft_atoi(const char *str);
 void				ft_bzero(void *s, size_t n);
+int					ft_copyt2d(char ***t1, char **t2);
+void				ft_freet2d(char ***t);
 
 #endif

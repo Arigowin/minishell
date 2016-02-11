@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-t_bool	replace_minus(char **paths, char **env)
+int		replace_minus(char **paths, char **env)
 {
 
 #ifdef DEBUG
@@ -14,31 +14,37 @@ t_bool	replace_minus(char **paths, char **env)
 	char	**oldpwd;
 	int		i;
 	char	*tmp;
+	int		nb_minus;
 
 	i = 0;
+	nb_minus = 0;
 	tmp = NULL;
 	while (paths[i])
 	{
 		if (ft_strequ(paths[i], "-"))
 		{
 			ft_strdel(&paths[i]);
-			oldpwd = get_env("OLDPWD", env);
-			if ((paths[i] = ft_strdup(oldpwd[0])) == NULL)
-				return (ft_error("strdup replace_minus", paths[i], FALSE));
-			tmp = paths[i];
+			if (tmp == NULL)
+			{
+				oldpwd = get_env("OLDPWD", env);
+				if ((paths[i] = ft_strdup(oldpwd[0])) == NULL)
+					return (ft_error("strdup replace_minus", paths[i], FALSE) - 1);
+				tmp = paths[i];
+			}
+			nb_minus++;
 		}
 		i++;
 	}
 	if (tmp != NULL)
 		ft_putendl(tmp);
-	return (TRUE);
+	return (nb_minus);
 }
 
-t_bool	set_env(char *name, char **env, char *str)
+t_bool	modif_env(char *name, char **env, char *str)
 {
 
 #ifdef DEBUG
-	ft_putendl("DEBUG : set_env");
+	ft_putendl("DEBUG : modif_env");
 #endif
 
 	char	*tmp;
@@ -55,8 +61,10 @@ t_bool	set_env(char *name, char **env, char *str)
 		if (ft_strcmp(tmp, name) == '=')
 		{
 			b = TRUE;
-			env[i] = ft_strjoin(tmp, str);
-			break ;
+			if (str != NULL)
+				env[i] = ft_strjoin(tmp, str);
+			else
+				env[i] = ft_strdup(tmp);
 		}
 		ft_strdel(&tmp);
 		i++;
@@ -67,12 +75,75 @@ t_bool	set_env(char *name, char **env, char *str)
 		env[i] = ft_strjoin(tmp, str);
 		b = TRUE;
 	}
+	i = 0;
 	return (b);
 }
 
+t_bool	del_env(char *name, t_minishell *s)
+{
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : del_env");
+#endif
+
+	char	*tmp;
+	char	**tmpenv;
+	int		i;
+	int		j;
+	int		len;
+	t_bool	b;
+
+	i = 0;
+	j = 0;
+	b = FALSE;
+	tmpenv = (char **)malloc(sizeof(char *) * s->nbenv);
+	while ((s->env)[i] && (s->env)[i][0])
+	{
+		tmpenv[j] = NULL;
+		len = len_to_equal((s->env)[i]);
+		tmp = ft_strsub((s->env)[i], 0, len);
+		if (ft_strcmp(tmp, name) == '=')
+		{
+			b = TRUE;
+			s->nbenv--;
+		}
+		else
+		{
+			tmpenv[j] = ft_strdup((s->env)[i]);
+			j++;
+		}
+		i++;
+	}
+	tmpenv[j] = NULL;
+	ft_freet2d(&(s->env));
+	ft_copyt2d(&(s->env), tmpenv);
+	ft_freet2d(&tmpenv);
+	return (b);
+}
+
+t_bool	add_env(char *name, t_minishell *s, char *str)
+{
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : add_env");
+#endif
+	char	**tmpenv;
+	char	*tmp;
+
+	tmpenv = (char **)malloc(sizeof(char *) * (s->nbenv + 1));
+	ft_copyt2d(&tmpenv, s->env);
+	ft_freet2d(&(s->env));
+	tmp = ft_strjoin(name, "=");
+	tmpenv[s->nbenv] = ft_strjoin(tmp, str);
+	ft_strdel(&tmp);
+	s->nbenv++;
+	tmpenv[s->nbenv] = NULL;
+	ft_copyt2d(&(s->env), tmpenv);
+	ft_freet2d(&tmpenv);
+	return (TRUE);
+}
+
 // cd
-// cd libft includes => cd libft ; cd includes
-// cd libft a => cd: string not in pwd: libft
 t_bool	change_directory(char **cmd, char **env)
 {
 
@@ -83,17 +154,15 @@ t_bool	change_directory(char **cmd, char **env)
 	int		i;
 	char	buff[BUFF_S];
 	char	**tmp;
+	int		nb_minus;
 
 	i = 0;
 	while (cmd[i])
 		i++;
-	if (i > 3)
-		return (ft_error("too many arguments", NULL, TRUE));
-	if (i > 2)
-		return (ft_error("string not in pwd: ", cmd[2], TRUE));
-	i = 1;
-	if (replace_minus(cmd, env) == FALSE)
+	if ((nb_minus = replace_minus(cmd, env)) == -1)
 		return (FALSE);
+	if ((i - (nb_minus == 0 ? 0 : nb_minus)) > 2)
+		return (ft_error("too many arguments", NULL, TRUE));
 	if (cmd[1] == NULL)
 	{
 		if ((tmp = get_env("HOME", env)) == NULL)
@@ -104,19 +173,17 @@ t_bool	change_directory(char **cmd, char **env)
 		if (chdir(tmp[0]) == -1)
 			return (FALSE);
 	}
+	i = 1;
 	while (cmd[i])
 	{
-		// a ramplacer par une autre fonction qui accepte les ../..
-		//		if (search_exe(t, cmd[i]) == NULL)
-		//			return (ft_error("no such file or directory: ", cmd[i], TRUE));
 		if (chdir(cmd[i]) == -1)
-			return (FALSE);
+			return (ft_error("no such file or directory: ", cmd[i], TRUE));
 		i++;
 	}
 	getcwd(buff, BUFF_S);
 	tmp = get_env("PWD", env);
-	set_env("OLDPWD", env, tmp[0]);
-	set_env("PWD", env, buff);
+	modif_env("OLDPWD", env, tmp[0]);
+	modif_env("PWD", env, buff);
 	return (TRUE);
 }
 
@@ -131,7 +198,7 @@ void	print_env(char **env)
 	int i;
 
 	i = 0;
-	while (env[i] && env[i][0])
+	while (env[i])
 	{
 		ft_putendl(env[i]);
 		i++;
@@ -140,18 +207,7 @@ void	print_env(char **env)
 // setenv
 // unsetenv
 
-void	verif_env(char **env)
-{
-	char	buff[BUFF_S];
-
-	getcwd(buff, BUFF_S);
-	if (get_env("PWD", env) == NULL)
-		set_env("PWD", env, buff);
-	if (get_env("OLDPWD", env) == NULL)
-		set_env("OLDPWD", env, buff);
-}
-
-int		body(char **env)
+int		body(t_minishell *s)
 {
 
 #ifdef DEBUG
@@ -163,7 +219,6 @@ int		body(char **env)
 	char	*tmp;
 	int		ret_exec;
 
-	verif_env(env);
 	if ((t = readline()) == NULL)
 		return (TRUE);
 	if (ft_strequ(t[0], "exit"))
@@ -171,16 +226,20 @@ int		body(char **env)
 		ft_putendl("exit");
 		return (FALSE);
 	}
-	if (replace_tilde(t, env) == FALSE)
+	if (replace_tilde(t, s->env) == FALSE)
 		return (FALSE);
 	else if (ft_strequ(t[0], "cd"))
-		return (change_directory(t, env));
+		return (change_directory(t, s->env));
 	else if (ft_strequ(t[0], "env"))
 	{
-		print_env(env);
+		print_env(s->env);
 		return (TRUE);
 	}
-	if ((paths = get_env("PATH", env)) == NULL)
+	else if (ft_strequ(t[0], "setenv"))
+		return (add_env(t[1], s, t[2]));
+	else if (ft_strequ(t[0], "unsetenv"))
+		return (del_env(t[1], s));
+	if ((paths = get_env("PATH", s->env)) == NULL)
 		return (ft_error("PATH not found ", t[0], TRUE));
 	if ((tmp = search_exe(paths, t[0])) == NULL)
 		return (ft_error("command not found: ", t[0], TRUE));
@@ -191,6 +250,17 @@ int		body(char **env)
 	return (TRUE);
 }
 
+void	verif_env(t_minishell *s)
+{
+	char	buff[BUFF_S];
+
+	getcwd(buff, BUFF_S);
+	if (get_env("PWD", s->env) == NULL)
+		add_env("PWD", s, buff);
+	if (get_env("OLDPWD", s->env) == NULL)
+		add_env("OLDPWD", s, buff);
+}
+
 int		main(int ac, char **av, char **env)
 {
 
@@ -198,16 +268,21 @@ int		main(int ac, char **av, char **env)
 	ft_putendl("DEBUG : START");
 #endif
 
+	t_minishell	s;
 	t_bool	b;
 
 	if (ac == 1)
 	{
+		s.nbenv = ft_copyt2d(&(s.env), env);
+		printf("%zu\n", s.nbenv);
+		verif_env(&s);
 		b = TRUE;
 		while (b)
 		{
 			ft_putstr("$> ");
-			b = body(env);
+			b = body(&s);
 		}
+		ft_freet2d(&(s.env));
 	}
 	ac = 1;
 	(void)av;
