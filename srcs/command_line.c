@@ -67,10 +67,12 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 		}
 		else if (paths[i][0] == '~')
 		{
-			tmp1 = ft_strsub(paths[i], 1, ft_strlen(paths[i]));
+			if ((tmp1 = ft_strsub(paths[i], 1, ft_strlen(paths[i]))) == NULL)
+				return (ft_error(0, "ERROR : strsub replace_tilde", NULL, FALSE));
 			ft_strdel(&paths[i]);
 			home = get_env("HOME", s);
-			paths[i] = ft_strjoin(home[0], tmp1);
+			if ((paths[i] = ft_strjoin(home[0], tmp1)) == NULL)
+				return (ft_error(0, "ERROR : strjoin replace_tilde", NULL, FALSE));
 		}
 		i++;
 	}

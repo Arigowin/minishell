@@ -37,15 +37,16 @@ char	**get_env(char *name, t_minishell *s)
 	while (i < s->nbenv)
 	{
 		len = len_to_equal((s->env)[i]);
-		tmp = ft_strsub((s->env)[i], 0, len - 1);
+		if ((tmp = ft_strsub((s->env)[i], 0, len - 1)) == NULL)
+			return (NULL);
 		if (ft_strcmp(tmp, name) == 0)
 		{
 			b = TRUE;
 			ft_strdel(&tmp);
 			if ((tmp = ft_strsub((s->env)[i], len, ft_strlen((s->env)[i]))) == NULL)
-				b = ft_error(0, "ERROR : sub get_env", (s->env)[i], FALSE);
+				b = ft_error(0, "ERROR : strsub get_env", (s->env)[i], FALSE);
 			if ((ret = ft_strsplit(tmp, ':')) == NULL)
-				b = ft_error(0, "ERROR : split get_env", (s->env)[i], FALSE);
+				b = ft_error(0, "ERROR : strsplit get_env", (s->env)[i], FALSE);
 			break ;
 		}
 		ft_strdel(&tmp);
@@ -75,22 +76,31 @@ t_bool	modif_env(char *name, t_minishell *s, char *str)
 	while (i < s->nbenv && !b)
 	{
 		len = len_to_equal((s->env)[i]);
-		tmp = ft_strsub((s->env)[i], 0, len);
+		if ((tmp = ft_strsub((s->env)[i], 0, len)) == NULL)
+			return (ft_error(0, "ERROR : strsub modif_env", NULL, FALSE));
 		if (ft_strcmp(tmp, name) == '=')
 		{
 			b = TRUE;
 			if (str != NULL)
-				(s->env)[i] = ft_strjoin(tmp, str);
+			{
+				if (((s->env)[i] = ft_strjoin(tmp, str)) == NULL)
+					return (ft_error(0, "ERROR : strjoin modif_env", NULL, FALSE));
+			}
 			else
-				(s->env)[i] = ft_strdup(tmp);
+			{
+				if (((s->env)[i] = ft_strdup(tmp)) == NULL)
+					return (ft_error(0, "ERROR : strdup modif_env", NULL, FALSE));
+			}
 		}
 		ft_strdel(&tmp);
 		i++;
 	}
 	if (!b)
 	{
-		tmp = ft_strjoin(name, "=");
-		(s->env)[i] = ft_strjoin(tmp, str);
+		if ((tmp = ft_strjoin(name, "=")) == NULL)
+			return (ft_error(0, "ERROR : strjoin modif_env", NULL, FALSE));
+		if (((s->env)[i] = ft_strjoin(tmp, str)) == NULL)
+			return (ft_error(0, "ERROR : strjoin modif_env", NULL, FALSE));
 		b = TRUE;
 	}
 	i = 0;
@@ -115,11 +125,13 @@ t_bool	del_env(char *name, t_minishell *s)
 	i = 0;
 	j = 0;
 	b = FALSE;
-	tmpenv = (char **)malloc(sizeof(char *) * s->nbenv);
+	if ((tmpenv = (char **)malloc(sizeof(char *) * s->nbenv)) == NULL)
+		return (ft_error(2, "ERROR : malloc del_env", NULL, FALSE));
 	while ((s->env)[i] && (s->env)[i][0])
 	{
 		len = len_to_equal((s->env)[i]);
-		tmp = ft_strsub((s->env)[i], 0, len);
+		if ((tmp = ft_strsub((s->env)[i], 0, len)) == NULL)
+			return (ft_error(0, "ERROR : strsub del_env", NULL, FALSE));
 		if (ft_strcmp(tmp, name) == '=')
 		{
 			b = TRUE;
@@ -127,7 +139,8 @@ t_bool	del_env(char *name, t_minishell *s)
 		}
 		else
 		{
-			tmpenv[j] = ft_strdup((s->env)[i]);
+			if ((tmpenv[j] = ft_strdup((s->env)[i])) == NULL)
+				return (ft_error(0, "ERROR : strdup del_env", NULL, FALSE));
 			j++;
 		}
 		i++;
@@ -150,14 +163,22 @@ t_bool	add_env(char *name, t_minishell *s, char *str)
 	char	**tmpenv;
 	char	*tmp;
 
-	tmpenv = (char **)malloc(sizeof(char *) * (s->nbenv + 1));
+	if ((tmpenv = (char **)malloc(sizeof(char *) * (s->nbenv + 1))) == NULL)
+		return (ft_error(2, "ERROR : malloc add_env", NULL, FALSE));
 	ft_copyt2d(&tmpenv, s->env);
 	ft_freet2d(&(s->env), s->nbenv);
-	tmp = ft_strjoin(name, "=");
+	if ((tmp = ft_strjoin(name, "=")) == NULL)
+		return (ft_error(0, "ERROR : strjoin add_env", NULL, FALSE));
 	if (str != NULL)
-		tmpenv[s->nbenv] = ft_strjoin(tmp, str);
+	{
+		if ((tmpenv[s->nbenv] = ft_strjoin(tmp, str)) == NULL)
+			return (ft_error(0, "ERROR : strjoin add_env", NULL, FALSE));
+	}
 	else
-		tmpenv[s->nbenv] = ft_strdup(tmp);
+	{
+		if ((tmpenv[s->nbenv] = ft_strdup(tmp)) == NULL)
+			return (ft_error(0, "ERROR : strdup add_env", NULL, FALSE));
+	}
 	ft_strdel(&tmp);
 	s->nbenv++;
 	tmpenv[s->nbenv] = NULL;
