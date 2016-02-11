@@ -2,6 +2,7 @@
 #include "minishell.h"
 #include "get_next_line.h"
 
+#include <stdio.h>
 void	ft_tab_to_space(char **str)
 {
 	int		i;
@@ -36,8 +37,6 @@ char	**readline(void)
 	return (NULL);
 }
 
-// if ~/dir remplace ~
-
 t_bool	replace_tilde(char **paths, t_minishell *s)
 {
 
@@ -46,6 +45,7 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 #endif
 
 	char	**home;
+	char	*tmp1;
 	int		i;
 
 	i = 0;
@@ -65,12 +65,12 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error(0, "strdup replace tilde", paths[i], FALSE));
 		}
-		else if (ft_strequ(paths[i], "~"))
+		else if (paths[i][0] == '~')
 		{
+			tmp1 = ft_strsub(paths[i], 1, ft_strlen(paths[i]));
 			ft_strdel(&paths[i]);
 			home = get_env("HOME", s);
-			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error(0, "strdup replace tilde", paths[i], FALSE));
+			paths[i] = ft_strjoin(home[0], tmp1);
 		}
 		i++;
 	}

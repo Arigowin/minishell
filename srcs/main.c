@@ -20,7 +20,6 @@ void	verif_env(t_minishell *s)
 		set_env("OLDPWD", s, buff);
 }
 
-// if -/dir remplace -
 int		replace_minus(char **paths, t_minishell *s)
 {
 
@@ -58,7 +57,6 @@ int		replace_minus(char **paths, t_minishell *s)
 	return (nb_minus);
 }
 
-// gerer le ./
 t_bool	change_directory(char **cmd, t_minishell *s)
 {
 
@@ -104,6 +102,7 @@ t_bool	change_directory(char **cmd, t_minishell *s)
 }
 
 // executer /bin/ls
+// gerer le ./
 int		body(t_minishell *s)
 {
 
