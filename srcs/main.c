@@ -89,6 +89,8 @@ t_bool	change_directory(char **cmd, char **env)
 		i++;
 	if (i > 3)
 		return (ft_error("too many arguments", NULL, TRUE));
+	if (i > 2)
+		return (ft_error("string not in pwd: ", cmd[2], TRUE));
 	i = 1;
 	if (replace_minus(cmd, env) == FALSE)
 		return (FALSE);
