@@ -6,18 +6,18 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 11:14:54 by dolewski          #+#    #+#             */
-/*   Updated: 2016/02/11 11:17:50 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/02/11 12:33:07 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_freet2d(char ***t)
+void	ft_freet2d(char ***t, int len)
 {
 	int		i;
 
 	i = 0;
-	while ((*t)[i])
+	while (i < len)
 	{
 		ft_strdel(&((*t)[i]));
 		i++;

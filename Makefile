@@ -19,7 +19,8 @@ SRC = main.c \
 	  execprog.c \
 	  path.c \
 	  error.c \
-	  command_line.c
+	  command_line.c \
+	  env.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 

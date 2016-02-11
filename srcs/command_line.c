@@ -36,7 +36,9 @@ char	**readline(void)
 	return (NULL);
 }
 
-t_bool	replace_tilde(char **paths, char **env)
+// if ~/dir remplace ~
+
+t_bool	replace_tilde(char **paths, t_minishell *s)
 {
 
 #ifdef DEBUG
@@ -52,23 +54,23 @@ t_bool	replace_tilde(char **paths, char **env)
 		if (ft_strequ(paths[i], "~-"))
 		{
 			ft_strdel(&paths[i]);
-			home = get_env("OLDPWD", env);
+			home = get_env("OLDPWD", s);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error("strdup replace tilde", paths[i], FALSE));
+				return (ft_error(0, "strdup replace tilde", paths[i], FALSE));
 		}
 		else if (ft_strequ(paths[i], "~+"))
 		{
 			ft_strdel(&paths[i]);
-			home = get_env("PWD", env);
+			home = get_env("PWD", s);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error("strdup replace tilde", paths[i], FALSE));
+				return (ft_error(0, "strdup replace tilde", paths[i], FALSE));
 		}
 		else if (ft_strequ(paths[i], "~"))
 		{
 			ft_strdel(&paths[i]);
-			home = get_env("HOME", env);
+			home = get_env("HOME", s);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error("strdup replace tilde", paths[i], FALSE));
+				return (ft_error(0, "strdup replace tilde", paths[i], FALSE));
 		}
 		i++;
 	}

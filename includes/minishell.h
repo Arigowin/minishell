@@ -4,7 +4,7 @@
 # define TRUE 1
 # define FALSE 0
 # define BUFF_S 1024
-#define DEBUG
+//#define DEBUG
 
 # include <sys/types.h>
 
@@ -17,14 +17,23 @@ typedef struct	s_minishell
 }				t_minishell;
 
 int				execprog(char *cmd, char **arg, char **env);
-char			**get_env(char *name, char **env);
 char			*format_path_exe(char *path, char *cmd);
 char			*search_exe(char **paths, char *exe);
-t_bool			ft_error(char *str, char *exe, t_bool ret);
+t_bool			ft_error(int i, char *str, char *exe, t_bool ret);
 void			ft_tab_to_space(char **str);
 char			**readline(void);
-t_bool			replace_tilde(char **paths, char **env);
-int				len_to_equal(char *str);
+t_bool			replace_tilde(char **paths, t_minishell *s);
+
+// env
+size_t			len_to_equal(char *str);
+char			**get_env(char *name, t_minishell *s);
+
+// in env.c
+t_bool			modif_env(char *name, t_minishell *s, char *str);
+t_bool			del_env(char *name, t_minishell *s);
+t_bool			add_env(char *name, t_minishell *s, char *str);
+t_bool			set_env(char *name, t_minishell *s, char *str);
+void			print_env(t_minishell *s);
 
 #endif
 
