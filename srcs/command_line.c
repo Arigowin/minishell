@@ -16,7 +16,7 @@ void	ft_tab_to_space(char **str)
 	}
 }
 
-char	**readline(void)
+t_bool	readline(char ***t)
 {
 
 #ifdef DEBUG
@@ -25,16 +25,25 @@ char	**readline(void)
 
 	char	*line;
 	char	*tmp;
+	int		ret;
 
-	if (get_next_line(0, &line) != -1 && line[0] != '\0')
+	if ((ret = get_next_line(0, &line)) != -1)
 	{
-		if ((tmp = ft_strtrim(line)) == NULL)
-			return (NULL);
-		ft_tab_to_space(&tmp);
-		ft_strdel(&line);
-		return (ft_strsplit(tmp, ' '));
+		if (line && line[0] != '\0')
+		{
+			if ((tmp = ft_strtrim(line)) == NULL)
+				return (FALSE);
+			ft_tab_to_space(&tmp);
+			ft_strdel(&line);
+			if ((*t = ft_strsplit(tmp, ' ')) == NULL)
+				return (FALSE);
+		}
+		else if (line == NULL)
+			return (FALSE);
 	}
-	return (NULL);
+	if (ret == -1)
+		return (FALSE);
+	return (TRUE);
 }
 
 t_bool	replace_tilde(char **paths, t_minishell *s)

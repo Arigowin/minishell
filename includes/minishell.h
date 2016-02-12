@@ -4,7 +4,7 @@
 # define TRUE 1
 # define FALSE 0
 # define BUFF_S 1024
-//#define DEBUG
+#define DEBUG
 
 # include <sys/types.h>
 
@@ -22,7 +22,7 @@ char			*format_path_exe(char *path, char *cmd);
 char			*search_exe(char **paths, char *exe);
 t_bool			ft_error(int i, char *str, char *exe, t_bool ret);
 void			ft_tab_to_space(char **str);
-char			**readline(void);
+t_bool			readline(char ***t);
 t_bool			replace_tilde(char **paths, t_minishell *s);
 void			verif_env(t_minishell *s);
 void			take_path_in_file(t_minishell *s);

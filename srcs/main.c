@@ -22,6 +22,11 @@ void	verif_env(t_minishell *s)
 
 t_bool	builtins(char **t, t_minishell *s)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : builtins");
+#endif
+
 	int		i;
 
 	if (ft_strequ(t[0], "exit"))
@@ -64,8 +69,6 @@ t_bool	builtins(char **t, t_minishell *s)
 	return (2);
 }
 
-// executer /bin/ls
-// gerer le ./
 int		body(t_minishell *s)
 {
 
@@ -79,8 +82,10 @@ int		body(t_minishell *s)
 	t_bool	b;
 
 	tmp = NULL;
-
-	if ((t = readline()) == NULL)
+	t = NULL;
+	if ((readline(&t)) == FALSE)
+		return (FALSE);
+	if (t == NULL)
 		return (TRUE);
 
 	if ((b = builtins(t, s)) == TRUE)
@@ -94,6 +99,7 @@ int		body(t_minishell *s)
 		take_path_in_file(s);
 	}
 
+	printf("%d\t%d\n", t[0][0], t[0][1]);
 	if ((tmp = search_exe(s->paths, t[0])) == NULL)
 	{
 		return (ft_error(0, "command not found: ", t[0], TRUE));
