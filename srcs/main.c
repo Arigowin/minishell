@@ -85,7 +85,7 @@ int		body(t_minishell *s)
 	t = NULL;
 	if ((readline(&t)) == FALSE)
 		return (FALSE);
-	if (t == NULL)
+	if (t == NULL || t[0] == NULL)
 		return (TRUE);
 
 	if ((b = builtins(t, s)) == TRUE)
@@ -99,7 +99,6 @@ int		body(t_minishell *s)
 		take_path_in_file(s);
 	}
 
-	printf("%d\t%d\n", t[0][0], t[0][1]);
 	if ((tmp = search_exe(s->paths, t[0])) == NULL)
 	{
 		return (ft_error(0, "command not found: ", t[0], TRUE));
@@ -124,6 +123,7 @@ int		main(int ac, char **av, char **env)
 	t_minishell	s;
 	t_bool	b;
 
+	b = 1;
 	if (ac == 1)
 	{
 		s.nbenv = ft_copyt2d(&(s.env), env);
@@ -141,5 +141,5 @@ int		main(int ac, char **av, char **env)
 
 	ft_putendl("DEBUG : END");
 
-	return (0);
+	return (b);
 }

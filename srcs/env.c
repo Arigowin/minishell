@@ -2,6 +2,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
+#include <stdio.h>
 size_t		len_to_equal(char *str)
 {
 
@@ -163,8 +164,9 @@ t_bool	add_env(char *name, t_minishell *s, char *str)
 	char	**tmpenv;
 	char	*tmp;
 
-	if ((tmpenv = (char **)malloc(sizeof(char *) * (s->nbenv + 1))) == NULL)
-		return (ft_error(2, "ERROR : malloc add_env", NULL, FALSE));
+//	if ((tmpenv = (char **)malloc(sizeof(char *) * (s->nbenv + 1))) == NULL)
+//		return (ft_error(2, "ERROR : malloc add_env", NULL, FALSE));
+
 	ft_copyt2d(&tmpenv, s->env);
 	ft_freet2d(&(s->env), s->nbenv);
 	if ((tmp = ft_strjoin(name, "=")) == NULL)
@@ -184,6 +186,7 @@ t_bool	add_env(char *name, t_minishell *s, char *str)
 	tmpenv[s->nbenv] = NULL;
 	ft_copyt2d(&(s->env), tmpenv);
 	ft_freet2d(&tmpenv, s->nbenv);
+
 	return (TRUE);
 }
 

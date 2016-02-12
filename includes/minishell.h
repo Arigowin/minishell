@@ -4,7 +4,7 @@
 # define TRUE 1
 # define FALSE 0
 # define BUFF_S 1024
-#define DEBUG
+//#define DEBUG
 
 # include <sys/types.h>
 

@@ -57,9 +57,9 @@ char	*search_exe(char **paths, char *exe)
 
 	i = 0;
 	b = FALSE;
-	if (exe[0] == '/' || (exe[0] == '.' && exe[1] == '/'))
+	if (exe != NULL && (exe[0] == '/' || (exe[0] == '.' && exe[1] == '/')))
 		return (exe);
-	while (paths[i] != NULL && !b)
+	while (exe != NULL && paths[i] != NULL && !b)
 	{
 		if ((dir = opendir(paths[i])) != NULL)
 		{

@@ -6,11 +6,12 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 11:14:54 by dolewski          #+#    #+#             */
-/*   Updated: 2016/02/11 12:33:07 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/02/12 16:53:51 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include <stdlib.h>
 
 void	ft_freet2d(char ***t, int len)
 {
@@ -22,4 +23,5 @@ void	ft_freet2d(char ***t, int len)
 		ft_strdel(&((*t)[i]));
 		i++;
 	}
+	free(*t);
 }
