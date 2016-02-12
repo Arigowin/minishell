@@ -12,7 +12,7 @@ env:
   - ARCH=i686
 
 script:
-  - make
+  - make CC=$CC
 
 addons:
   apt:
