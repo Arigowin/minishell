@@ -2,21 +2,20 @@
 #include "libft.h"
 #include <dirent.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 void	take_path_in_file(t_minishell *s)
 {
-// /etc/paths
-	// faire un read et tout les /n les remplacer par des : sauf le dernier
-	s->paths = NULL;
+	char	buff[BUFF_S];
 	int		ret_read;
 	int		fd;
 
-	fd = opendir("/etc/paths", O_RDONLY);
-	while ((ret_read = read(fd, buff, BUFF_S)) > 0)
+	fd = open("/etc/paths", O_RDONLY);
+	if ((ret_read = read(fd, buff, BUFF_S)) > 0)
 	{
-
+		s->paths = ft_strsplit(buff, '\n');
 	}
-
 }
 
 char	*format_path_exe(char *path, char *cmd)

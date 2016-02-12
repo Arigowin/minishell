@@ -25,6 +25,7 @@ void			ft_tab_to_space(char **str);
 char			**readline(void);
 t_bool			replace_tilde(char **paths, t_minishell *s);
 void			verif_env(t_minishell *s);
+void			take_path_in_file(t_minishell *s);
 
 // env
 size_t			len_to_equal(char *str);

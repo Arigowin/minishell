@@ -91,7 +91,7 @@ int		body(t_minishell *s)
 	// si pas de path charger de qque part
 	if ((s->paths = get_env("PATH", s)) == NULL)
 	{
-		//	take_path_in_file()
+		take_path_in_file(s);
 	}
 
 	if ((tmp = search_exe(s->paths, t[0])) == NULL)
