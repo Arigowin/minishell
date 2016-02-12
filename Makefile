@@ -33,7 +33,7 @@ $(NAME): $(OFILES)
 	@echo "$(NAME) : Building Libft"
 	@$(MAKE) -C $(LIBPATH)
 	@echo "$(NAME) : Building $@"
-	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	@$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 	@echo "\033[32mDone !\033[0m"
 
 $(OPATH)/%.o: $(CPATH)/%.c
