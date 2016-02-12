@@ -20,24 +20,10 @@ void	verif_env(t_minishell *s)
 		set_env("OLDPWD", s, buff);
 }
 
-// executer /bin/ls
-// gerer le ./
-int		body(t_minishell *s)
+t_bool	builtins(char **t, t_minishell *s)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : body");
-#endif
-
-	char	**t;
-	char	**paths;
-	char	*tmp;
-	int		ret_exec;
 	int		i;
-	t_bool	b;
 
-	if ((t = readline()) == NULL)
-		return (TRUE);
 	if (ft_strequ(t[0], "exit"))
 	{
 		ft_putendl("exit");
@@ -70,28 +56,64 @@ int		body(t_minishell *s)
 		i = 1;
 		while (t[i])
 		{
-			b = del_env(t[i], s);
+			del_env(t[i], s);
 			i++;
 		}
 		return (TRUE);
 	}
-	if ((paths = get_env("PATH", s)) == NULL)
-		return (ft_error(0, "PATH not found ", t[0], TRUE));
-	if ((tmp = search_exe(paths, t[0])) == NULL)
-		return (ft_error(0, "command not found: ", t[0], TRUE));
-	if ((tmp = format_path_exe(tmp, t[0])) == NULL)
+	return (2);
+}
+
+// executer /bin/ls
+// gerer le ./
+int		body(t_minishell *s)
+{
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : body");
+#endif
+
+	char	**t;
+	char	*tmp;
+	int		ret_exec;
+	t_bool	b;
+
+	tmp = NULL;
+
+	if ((t = readline()) == NULL)
 		return (TRUE);
-	if ((ret_exec = execprog(tmp, t, NULL)) == -1)
+
+	if ((b = builtins(t, s)) == TRUE)
+		return (TRUE);
+	else if (b == FALSE)
+		return (FALSE);
+
+	// si pas de path charger de qque part
+	if ((s->paths = get_env("PATH", s)) == NULL)
+	{
+		//	take_path_in_file()
+	}
+
+	if ((tmp = search_exe(s->paths, t[0])) == NULL)
+	{
+		return (ft_error(0, "command not found: ", t[0], TRUE));
+	}
+
+	if ((tmp = format_path_exe(tmp, t[0])) == NULL)
+	{
+		return (TRUE);
+	}
+
+	if ((ret_exec = execprog(tmp, t, s->env)) == -1)
 		return (ft_error(0, "exec format error: ", t[0], TRUE));
+
 	return (TRUE);
 }
 
 int		main(int ac, char **av, char **env)
 {
 
-#ifdef DEBUG
 	ft_putendl("DEBUG : START");
-#endif
 
 	t_minishell	s;
 	t_bool	b;
@@ -111,9 +133,7 @@ int		main(int ac, char **av, char **env)
 	ac = 1;
 	(void)av;
 
-#ifdef DEBUG
 	ft_putendl("DEBUG : END");
-#endif
 
 	return (0);
 }

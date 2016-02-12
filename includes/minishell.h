@@ -14,6 +14,7 @@ typedef struct	s_minishell
 {
 	char		**env;
 	size_t		nbenv;
+	char		**paths;
 }				t_minishell;
 
 int				execprog(char *cmd, char **arg, char **env);

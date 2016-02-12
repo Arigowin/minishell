@@ -3,6 +3,12 @@
 #include <dirent.h>
 #include <stdio.h>
 
+void	take_path_in_file(t_minishell *s)
+{
+// /etc/paths
+	// faire un read et tout les /n les remplacer par des : sauf le dernier
+	s->paths = NULL;
+}
 
 char	*format_path_exe(char *path, char *cmd)
 {
@@ -16,6 +22,8 @@ char	*format_path_exe(char *path, char *cmd)
 
 	ret = NULL;
 	tmp = NULL;
+	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || path == NULL)
+		return (cmd);
 	if (path[ft_strlen(path) - 1] != '/')
 	{
 		if ((tmp = ft_strjoin(path, "/")) == NULL)
@@ -41,6 +49,8 @@ char	*search_exe(char **paths, char *exe)
 
 	i = 0;
 	b = FALSE;
+	if (exe[0] == '/' || (exe[0] == '.' && exe[1] == '/'))
+		return (exe);
 	while (paths[i] != NULL && !b)
 	{
 		if ((dir = opendir(paths[i])) != NULL)
