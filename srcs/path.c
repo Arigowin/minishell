@@ -8,13 +8,14 @@ void	take_path_in_file(t_minishell *s)
 // /etc/paths
 	// faire un read et tout les /n les remplacer par des : sauf le dernier
 	s->paths = NULL;
-//	int		ret_read;
-//	int		fd;
-//
-//	fd = opendir("/etc/paths", O_RDONLY);
-//	while ((ret_read = read(fd, buff, BUFF_S)) > 0)
-//	{
-//	}
+	int		ret_read;
+	int		fd;
+
+	fd = opendir("/etc/paths", O_RDONLY);
+	while ((ret_read = read(fd, buff, BUFF_S)) > 0)
+	{
+
+	}
 
 }
 
