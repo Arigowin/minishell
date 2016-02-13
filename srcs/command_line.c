@@ -35,6 +35,7 @@ t_bool	readline(char ***t)
 				return (FALSE);
 			ft_tab_to_space(&tmp);
 			ft_strdel(&line);
+			// change to lexer_parser
 			if ((*t = ft_strsplit(tmp, ' ')) == NULL)
 				return (FALSE);
 		}

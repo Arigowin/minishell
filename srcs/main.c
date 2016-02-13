@@ -30,16 +30,18 @@ static void	init_t_minishell(t_minishell *s)
 
 static void	init_start(t_minishell *s, char **env)
 {
-	s->nbenv = ft_copyt2d(&(s->env), env);
+	size_t		i;
+
+	i = 0;
+	while (env[i])
+		i++;
+	s->nbenv = ft_copyt2d(&(s->env), env, i, i);
 	verif_env(s);
 }
 
 static int	start(char **env)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : body");
-#endif
+	ft_putendl("DEBUG : START");
 
 	t_minishell	s;
 	t_bool		b;
@@ -53,20 +55,17 @@ static int	start(char **env)
 		b = body(&s);
 	}
 	ft_freet2d(&(s.env), s.nbenv);
+
+	ft_putendl("DEBUG : END");
+
 	return (b);
 }
 
 int			main(int ac, char **av, char **env)
 {
-
-	ft_putendl("DEBUG : START");
-
 	if (ac == 1)
 		return (start(env));
 	ac = 1;
 	(void)av;
-
-	ft_putendl("DEBUG : END");
-
 	return (0);
 }

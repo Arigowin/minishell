@@ -10,7 +10,6 @@
 
 typedef char	t_bool;
 
-// malloc add environ
 // lexeur_parseur
 
 typedef struct	s_minishell

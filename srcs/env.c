@@ -148,7 +148,7 @@ t_bool	del_env(char *name, t_minishell *s)
 	}
 	tmpenv[j] = NULL;
 	ft_freet2d(&(s->env), s->nbenv + 1);
-	ft_copyt2d(&(s->env), tmpenv);
+	ft_copyt2d(&(s->env), tmpenv, s->nbenv, s->nbenv);
 	ft_freet2d(&tmpenv, s->nbenv);
 	return (b);
 }
@@ -164,10 +164,7 @@ t_bool	add_env(char *name, t_minishell *s, char *str)
 	char	**tmpenv;
 	char	*tmp;
 
-//	if ((tmpenv = (char **)malloc(sizeof(char *) * (s->nbenv + 1))) == NULL)
-//		return (ft_error(2, "ERROR : malloc add_env", NULL, FALSE));
-
-	ft_copyt2d(&tmpenv, s->env);
+	ft_copyt2d(&tmpenv, s->env, s->nbenv, s->nbenv + 1);
 	ft_freet2d(&(s->env), s->nbenv);
 	if ((tmp = ft_strjoin(name, "=")) == NULL)
 		return (ft_error(0, "ERROR : strjoin add_env", NULL, FALSE));
@@ -184,7 +181,7 @@ t_bool	add_env(char *name, t_minishell *s, char *str)
 	ft_strdel(&tmp);
 	s->nbenv++;
 	tmpenv[s->nbenv] = NULL;
-	ft_copyt2d(&(s->env), tmpenv);
+	ft_copyt2d(&(s->env), tmpenv, s->nbenv, s->nbenv);
 	ft_freet2d(&tmpenv, s->nbenv);
 
 	return (TRUE);
