@@ -2,8 +2,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
-#include <stdio.h>
-t_lstcmd	*lstcmdnew(char *value)
+static t_lstcmd	*lstcmdnew(char *value)
 {
 	t_lstcmd	*new;
 
@@ -15,62 +14,96 @@ t_lstcmd	*lstcmdnew(char *value)
 	return (new);
 }
 
-void	lstcmdadd(t_lstcmd **alst, char *value)
+static int		lstcmdadd(t_lstcmd **alst, char *value)
 {
 	t_lstcmd	*tmp;
 	t_lstcmd	*new;
 
-	new = lstcmdnew(value);
-	if (*alst != NULL)
+	if ((new = lstcmdnew(value)) == NULL)
+		return (0);
+	if (*alst == NULL)
+		*alst = new;
+	else
 	{
 		tmp = *alst;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new;
 	}
-	else
-		*alst = new;
+	return (1);
 }
 
-char	**lexer(char *str, char *sc)
+static char		**lst_to_tstring(t_lstcmd **lst, int nbelem)
 {
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : lst_to_string");
+#endif
+
+	t_lstcmd	*tmp;
+	char	**ret;
+	int		i;
+
+	if ((ret = (char **)malloc(sizeof(char *) * (nbelem + 1))) == NULL)
+		return (NULL);
+	i = 0;
+	while (*lst)
+	{
+		tmp = NULL;
+		if ((*lst)->next != NULL)
+			tmp = (*lst)->next;
+		if ((ret[i] = ft_strdup((*lst)->data)) == NULL)
+			return (NULL);
+		free((*lst)->data);
+		free(*lst);
+		*lst = tmp;
+		i++;
+	}
+	ret[i] = NULL;
+	return (ret);
+}
+
+char			**lexer(char *str, char *sc)
+{
+
+#ifdef DEBUG
+	ft_putendl("DEBUG : lexer");
+#endif
+
 	char		tmp[BUFF_S];
 	t_lstcmd	*lst;
-	t_bool		b;
 	size_t		i;
 	size_t		j;
 	size_t		k;
-	char		**ret;
 
 	i = 0;
 	j = 0;
-	ret = NULL;
+	k = 0;
+	lst = NULL;
+	ft_bzero(tmp, BUFF_S);
 	while (str && str[i])
 	{
-		b = TRUE;
-		k = 0;
-		while (sc && sc[k])
+		if (ft_strchr(sc, str[i]))
 		{
-			if (sc[k] == str[i])
+			if (tmp[0] != '\0')
 			{
-				tmp[j] = '\0';
 				lstcmdadd(&lst, tmp);
+				ft_bzero(tmp, BUFF_S);
 				j = 0;
-				b = FALSE;
+				k++;
 			}
-			k++;
 		}
-		if (b)
+		else
 		{
 			tmp[j] = str[i];
 			j++;
 		}
 		i++;
 	}
-	while (lst)
+	if (tmp[0] != '\0')
 	{
-		printf("->%s\n", lst->data);
-		lst = lst->next;
+		lstcmdadd(&lst, tmp);
+		k++;
 	}
-	return (ret);
+	return (lst_to_tstring(&lst, k));
 }

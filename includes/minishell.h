@@ -1,17 +1,16 @@
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # define TRUE 1
 # define FALSE 0
 # define BUFF_S 1024
+# define SEP " \t\n\0"
 //#define DEBUG
 
 # include <sys/types.h>
 
 typedef char	t_bool;
 
-// lexeur_parseur
-
+// access
 typedef struct		s_minishell
 {
 	char			**env;
@@ -70,41 +69,41 @@ void				take_path_in_file(t_minishell *s);
 #endif
 
 /*
-* opendir
-* readdir
-* closedir
-* - dirent
-*
-* malloc
-* free
-* exit
-* - stdlib
-*
-* getcwd
-* chdir
-* fork
-* close
-* read
-* write
-* execve
-* access
-* - unistd
-*
-* stat
-* lstat
-* fstat
-* - sys/stat
-*
-* open
-* - fcntl
-*
-* wait
-* waitpid
-* wait3
-* wait4
-* - sys/wait
-*
-* signal
-* kill
-* - signal
+** opendir
+** readdir
+** closedir
+** - dirent
+**
+** malloc
+** free
+** exit
+** - stdlib
+**
+** getcwd
+** chdir
+** fork
+** close
+** read
+** write
+** execve
+** access
+** - unistd
+**
+** stat
+** lstat
+** fstat
+** - sys/stat
+**
+** open
+** - fcntl
+**
+** wait
+** waitpid
+** wait3
+** wait4
+** - sys/wait
+**
+** signal
+** kill
+** - signal
 */

@@ -71,8 +71,10 @@ t_bool			change_directory(char **cmd, t_minishell *s)
 	i = 1;
 	while (cmd[i])
 	{
-		if (chdir(cmd[i]) == -1)
+		if (access(cmd[i], F_OK))
 			return (ft_error(1, "no such file or directory: ", cmd[i], TRUE));
+		if (chdir(cmd[i]) == -1)
+			return (ft_error(1, "permission denied: ", cmd[i], TRUE));
 		i++;
 	}
 	verif_env(s);

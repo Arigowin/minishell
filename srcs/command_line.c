@@ -4,19 +4,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-void	ft_tab_to_space(char **str)
-{
-	int		i;
-
-	i = 0;
-	while ((*str)[i])
-	{
-		if ((*str)[i] == '\t')
-			(*str)[i] = ' ';
-		i++;
-	}
-}
-
 t_bool	readline(char ***t)
 {
 
@@ -25,21 +12,13 @@ t_bool	readline(char ***t)
 #endif
 
 	char	*line;
-	char	*tmp;
 	int		ret;
 
 	if ((ret = get_next_line(0, &line)) != -1)
 	{
 		if (line && line[0] != '\0')
 		{
-			if ((tmp = ft_strtrim(line)) == NULL)
-				return (FALSE);
-			ft_tab_to_space(&tmp);
-			ft_strdel(&line);
-			// change to lexer_parser
-			lexer(tmp, " \n\0");
-			exit (-10);
-			if ((*t = ft_strsplit(tmp, ' ')) == NULL)
+			if ((*t = lexer(line, SEP)) == NULL)
 				return (FALSE);
 		}
 		else if (line == NULL)
@@ -69,14 +48,14 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 			ft_strdel(&paths[i]);
 			home = get_env("OLDPWD", s);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error(0, "strdup replace tilde", paths[i], FALSE));
+				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
 		}
 		else if (ft_strequ(paths[i], "~+"))
 		{
 			ft_strdel(&paths[i]);
 			home = get_env("PWD", s);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
-				return (ft_error(0, "strdup replace tilde", paths[i], FALSE));
+				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
 		}
 		else if (paths[i][0] == '~')
 		{

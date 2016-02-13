@@ -1,6 +1,7 @@
 #include "minishell.h"
 #include "libft.h"
 
+#include <stdio.h>
 static t_bool	format_and_exec_cmd(char **t, t_minishell *s)
 {
 	char	*tmp;
