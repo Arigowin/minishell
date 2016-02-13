@@ -3,6 +3,7 @@
 #include "get_next_line.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 void	ft_tab_to_space(char **str)
 {
 	int		i;
@@ -36,6 +37,8 @@ t_bool	readline(char ***t)
 			ft_tab_to_space(&tmp);
 			ft_strdel(&line);
 			// change to lexer_parser
+			lexer(tmp, " \n\0");
+			exit (-10);
 			if ((*t = ft_strsplit(tmp, ' ')) == NULL)
 				return (FALSE);
 		}

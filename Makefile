@@ -23,7 +23,8 @@ SRC = body.c \
 	error.c \
 	execprog.c \
 	main.c \
-	path.c
+	path.c \
+	lexer.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 
