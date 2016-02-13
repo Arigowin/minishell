@@ -2,7 +2,7 @@
 #include "libft.h"
 #include <unistd.h>
 
-int		replace_minus(char **paths, t_minishell *s)
+static int		replace_minus(char **paths, t_minishell *s)
 {
 
 #ifdef DEBUG
@@ -39,7 +39,7 @@ int		replace_minus(char **paths, t_minishell *s)
 	return (nb_minus);
 }
 
-t_bool	change_directory(char **cmd, t_minishell *s)
+t_bool			change_directory(char **cmd, t_minishell *s)
 {
 
 #ifdef DEBUG

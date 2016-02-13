@@ -13,9 +13,7 @@ void	take_path_in_file(t_minishell *s)
 
 	fd = open("/etc/paths", O_RDONLY);
 	if ((ret_read = read(fd, buff, BUFF_S)) > 0)
-	{
 		s->paths = ft_strsplit(buff, '\n');
-	}
 }
 
 char	*format_path_exe(char *path, char *cmd)

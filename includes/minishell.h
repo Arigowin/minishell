@@ -10,37 +10,54 @@
 
 typedef char	t_bool;
 
+// malloc add environ
+// lexeur_parseur
+
 typedef struct	s_minishell
 {
 	char		**env;
 	size_t		nbenv;
 	char		**paths;
+	char		*prompt;
 }				t_minishell;
 
-int				execprog(char *cmd, char **arg, char **env);
-char			*format_path_exe(char *path, char *cmd);
-char			*search_exe(char **paths, char *exe);
-t_bool			ft_error(int i, char *str, char *exe, t_bool ret);
+// body.c
+t_bool			body(t_minishell *s);
+
+// builtins.c
+t_bool			builtins(char **t, t_minishell *s);
+
+// builtins_cd.c
+t_bool			change_directory(char **cmd, t_minishell *s);
+
+// command_lines.c
 void			ft_tab_to_space(char **str);
 t_bool			readline(char ***t);
 t_bool			replace_tilde(char **paths, t_minishell *s);
-void			verif_env(t_minishell *s);
-void			take_path_in_file(t_minishell *s);
-
-// env
-size_t			len_to_equal(char *str);
-char			**get_env(char *name, t_minishell *s);
 
 // in env.c
+size_t			len_to_equal(char *str);
+char			**get_env(char *name, t_minishell *s);
 t_bool			modif_env(char *name, t_minishell *s, char *str);
 t_bool			del_env(char *name, t_minishell *s);
 t_bool			add_env(char *name, t_minishell *s, char *str);
 t_bool			set_env(char *name, t_minishell *s, char *str);
 void			print_env(t_minishell *s);
 
-// cd
-int				replace_minus(char **paths, t_minishell *s);
-t_bool			change_directory(char **cmd, t_minishell *s);
+// error.c
+t_bool			ft_error(int i, char *str, char *exe, t_bool ret);
+
+// execprog.c
+int				execprog(char *cmd, char **arg, char **env);
+
+// main.c
+void			verif_env(t_minishell *s);
+
+// path.c
+char			*format_path_exe(char *path, char *cmd);
+char			*search_exe(char **paths, char *exe);
+void			take_path_in_file(t_minishell *s);
+
 
 #endif
 
