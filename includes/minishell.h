@@ -8,9 +8,17 @@
 
 # include <sys/types.h>
 
+// exit 10
+// env
+// env -i
+// signaux
+// echo
+// ;
+// ""
+// SHLVL
+
 typedef char	t_bool;
 
-// access
 typedef struct		s_minishell
 {
 	char			**env;
