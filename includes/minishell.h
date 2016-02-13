@@ -59,11 +59,15 @@ int					execprog(char *cmd, char **arg, char **env);
 
 // main.c
 void				verif_env(t_minishell *s);
+void				print_path(char *path, t_minishell *s, char *color);
 
 // path.c
 char				*format_path_exe(char *path, char *cmd);
 char				*search_exe(char **paths, char *exe);
 void				take_path_in_file(t_minishell *s);
+
+// prompt.c
+void				print_prompt(t_minishell *s);
 
 
 #endif

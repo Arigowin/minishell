@@ -4,6 +4,29 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+void		print_path(char *path, t_minishell *s, char *color)
+{
+	char	**home;
+	size_t	i;
+	t_bool	b;
+
+	b = TRUE;
+	if ((home = get_env("HOME", s)) != NULL)
+	{
+		i = 0;
+		while (path[i] && home[0][i] && path[i] == home[0][i])
+			i++;
+		if (i == ft_strlen(home[0]))
+		{
+			ft_putstr_color(color, "~");
+			ft_putstr_color(color, ft_strsub(path, i, ft_strlen(path)));
+			b = FALSE;
+		}
+	}
+	if (b)
+		ft_putstr_color(color, path);
+}
+
 void		verif_env(t_minishell *s)
 {
 
@@ -51,7 +74,7 @@ static int	start(char **env)
 	b = TRUE;
 	while (b)
 	{
-		ft_putstr(s.prompt);
+		print_prompt(&s);
 		b = body(&s);
 	}
 	ft_freet2d(&(s.env), s.nbenv);

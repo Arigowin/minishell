@@ -35,7 +35,10 @@ static int		replace_minus(char **paths, t_minishell *s)
 		i++;
 	}
 	if (tmp != NULL)
-		ft_putendl(tmp);
+	{
+		print_path(tmp, s, "");
+		ft_putendl("");
+	}
 	return (nb_minus);
 }
 
