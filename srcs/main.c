@@ -34,22 +34,13 @@ void		verif_env(t_minishell *s)
 	ft_putendl("DEBUG : verif_env");
 #endif
 
-	char	**tmp;
-	char	*tmp2;
 	char	buff[BUFF_S];
 
-	tmp2 = NULL;
 	getcwd(buff, BUFF_S);
 	if (get_env("PWD", s) == NULL)
 		set_env("PWD", s, buff);
 	if (get_env("OLDPWD", s) == NULL)
 		set_env("OLDPWD", s, buff);
-	if ((tmp = get_env("SHLVL", s)) != NULL)
-		tmp2 = ft_itoa(ft_atoi(tmp[0]) + 1);
-	else
-		tmp2 = ft_strdup("1");
-	if (tmp2 != NULL)
-		set_env("SHLVL", s, tmp2);
 }
 
 static void	init_t_minishell(t_minishell *s)
@@ -62,13 +53,22 @@ static void	init_t_minishell(t_minishell *s)
 
 static void	init_start(t_minishell *s, char **env)
 {
+	char		**tmp;
+	char		*tmp2;
 	size_t		i;
 
 	i = 0;
+	tmp2 = NULL;
 	while (env[i])
 		i++;
 	s->nbenv = ft_copyt2d(&(s->env), env, i, i);
 	verif_env(s);
+	if ((tmp = get_env("SHLVL", s)) != NULL)
+		tmp2 = ft_itoa(ft_atoi(tmp[0]) + 1);
+	else
+		tmp2 = ft_strdup("1");
+	if (tmp2 != NULL)
+		set_env("SHLVL", s, tmp2);
 }
 
 static int	start(char **env)

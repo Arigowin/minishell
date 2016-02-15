@@ -46,14 +46,16 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 		if (ft_strequ(paths[i], "~-"))
 		{
 			ft_strdel(&paths[i]);
-			home = get_env("OLDPWD", s);
+			if ((home = get_env("OLDPWD", s)) == NULL)
+					return (TRUE);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
 		}
 		else if (ft_strequ(paths[i], "~+"))
 		{
 			ft_strdel(&paths[i]);
-			home = get_env("PWD", s);
+			if ((home = get_env("PWD", s)) == NULL)
+					return (TRUE);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
 		}
@@ -62,7 +64,8 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 			if ((tmp1 = ft_strsub(paths[i], 1, ft_strlen(paths[i]))) == NULL)
 				return (ft_error(0, "ERROR : strsub replace_tilde", NULL, FALSE));
 			ft_strdel(&paths[i]);
-			home = get_env("HOME", s);
+			if ((home = get_env("HOME", s)) == NULL)
+					return (TRUE);
 			if ((paths[i] = ft_strjoin(home[0], tmp1)) == NULL)
 				return (ft_error(0, "ERROR : strjoin replace_tilde", NULL, FALSE));
 		}
