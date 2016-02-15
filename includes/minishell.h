@@ -8,14 +8,7 @@
 
 # include <sys/types.h>
 
-// exit 10
-// env
-// env -i
-// signaux
-// echo
-// ;
-// ""
-// SHLVL
+// fuite memoire
 
 typedef char	t_bool;
 
@@ -76,6 +69,9 @@ void				take_path_in_file(t_minishell *s);
 
 // prompt.c
 void				print_prompt(t_minishell *s);
+
+// builtins_env.c
+t_bool				builtins_env(t_minishell *s);
 
 
 #endif

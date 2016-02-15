@@ -25,7 +25,8 @@ SRC = body.c \
 	main.c \
 	path.c \
 	lexer.c \
-	prompt.c
+	prompt.c \
+	builtins_env.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 

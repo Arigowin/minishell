@@ -13,8 +13,16 @@ static t_bool	format_and_exec_cmd(char **t, t_minishell *s)
 		return (ft_error(0, "command not found: ", t[0], TRUE));
 	if ((tmp = format_path_exe(tmp, t[0])) == NULL)
 		return (TRUE);
-	if ((ret_exec = execprog(tmp, t, s->env)) == -1)
-		return (ft_error(0, "exec format error: ", t[0], TRUE));
+	if ((ft_strequ(t[0], "env") && ft_strequ(t[1], "-i")))
+	{
+		if ((ret_exec = execprog(tmp, t, NULL)) == -1)
+			return (ft_error(0, "exec format error: ", t[0], TRUE));
+	}
+	else
+	{
+		if ((ret_exec = execprog(tmp, t, s->env)) == -1)
+			return (ft_error(0, "exec format error: ", t[0], TRUE));
+	}
 	return (TRUE);
 }
 
