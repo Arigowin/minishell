@@ -65,6 +65,8 @@ t_bool			builtins(char **t, t_minishell *s)
 		return (builtins_exit(t));
 	if (replace_tilde(t, s) == FALSE)
 		return (FALSE);
+	if (replace_env_var(t, s) == FALSE)
+		return (FALSE);
 	else if (ft_strequ(t[0], "cd"))
 		return (change_directory(t, s));
 	else if (ft_strequ(t[0], "setenv"))

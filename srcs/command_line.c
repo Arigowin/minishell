@@ -73,3 +73,51 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 	}
 	return (TRUE);
 }
+
+t_bool	replace_env_var(char **paths, t_minishell *s)
+{
+	char	*var;
+	char	*start;
+	char	*end;
+	char	**tmp2;
+	t_bool	b;
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	while (paths[i])
+	{
+		b = TRUE;
+		if (ft_strchr(paths[i], '$'))
+		{
+			j = 0;
+			while (paths[i][j] != '\0' && paths[i][j] != '$')
+				j++;
+			if ((start = ft_strsub(paths[i], 0, j)) == NULL)
+				return (ft_error(0, "ERROR : strsub1 replace_env_var", NULL, FALSE));
+			k = j;
+			while (paths[i][k] != '\0' && paths[i][k] != '/')
+				k++;
+			if ((var = ft_strsub(paths[i], j + 1, k - j - 1)) == NULL)
+				return (ft_error(0, "ERROR : strsub2 replace_env_var", NULL, FALSE));
+			if ((end = ft_strsub(paths[i], k, ft_strlen(paths[i]))) == NULL)
+				return (ft_error(0, "ERROR : strsub3 replace_env_var", NULL, FALSE));
+			tmp2 = get_env(var, s);
+			ft_strdel(&(paths[i]));
+			if (tmp2 != NULL && tmp2[0] != NULL)
+			{
+				if ((paths[i] = ft_strjoin(ft_strjoin(start, tmp2[0]), end)) == NULL)
+					return (ft_error(0, "ERROR : strjoin1 replace_env_var", NULL, FALSE));
+			}
+			else
+			{
+				if ((paths[i] = ft_strjoin(start, end)) == NULL)
+					return (ft_error(0, "ERROR : strjoin2 replace_env_var", NULL, FALSE));
+			}
+		}
+		if (ft_strchr(paths[i], '$') == NULL)
+			i++;
+	}
+	return (TRUE);
+}

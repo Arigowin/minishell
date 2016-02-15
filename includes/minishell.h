@@ -42,6 +42,7 @@ t_bool				change_directory(char **cmd, t_minishell *s);
 void				ft_tab_to_space(char **str);
 t_bool				readline(char ***t);
 t_bool				replace_tilde(char **paths, t_minishell *s);
+t_bool				replace_env_var(char **path, t_minishell *s);
 
 // in env.c
 size_t				len_to_equal(char *str);
