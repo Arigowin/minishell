@@ -18,16 +18,16 @@ LIBS = -L $(LIBPATH) -lft
 SRC = body.c \
 	builtins.c \
 	builtins_cd.c \
+	builtins_env.c \
 	command_line.c \
 	env.c \
 	error.c \
 	execprog.c \
+	free.c \
+	lexer.c \
 	main.c \
 	path.c \
-	lexer.c \
-	prompt.c \
-	builtins_env.c \
-	free.c
+	prompt.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 

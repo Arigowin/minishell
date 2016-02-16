@@ -13,8 +13,9 @@ static char		**take_path_in_file()
 	int		fd;
 
 	fd = open("/etc/paths", O_RDONLY);
+	ft_bzero(buff, BUFF_S);
 	if ((ret_read = read(fd, buff, BUFF_S)) > 0)
-		return (ft_strsplit(buff, '\n'));
+		return (lexer(buff, "\n"));
 	close(fd);
 	return (NULL);
 }
@@ -25,6 +26,7 @@ char			**take_path(char **env)
 	char	*tmp;
 
 	paths = NULL;
+	tmp = NULL;
 	if ((tmp = get_env("PATH", env)) == NULL)
 		paths = take_path_in_file();
 	else

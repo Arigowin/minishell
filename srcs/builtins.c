@@ -49,7 +49,8 @@ static t_bool	builtins_unsetenv(char **t, char ***env, int i)
 {
 	while (t[i])
 	{
-		del_env(t[i], env);
+		if (env_exist(t[i], *env))
+			del_env(t[i], env);
 		i++;
 	}
 	return (TRUE);

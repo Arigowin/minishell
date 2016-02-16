@@ -68,7 +68,10 @@ t_bool	replace_tilde(char **paths, char **env)
 				return (ft_error(0, "ERROR : strsub replace_tilde", NULL, FALSE));
 			ft_strdel(&paths[i]);
 			if ((home = get_env("HOME", env)) == NULL)
-					return (TRUE);
+			{
+				free(tmp1);
+				return (TRUE);
+			}
 			if ((paths[i] = ft_strjoin(home, tmp1)) == NULL)
 				return (ft_error(0, "ERROR : strjoin replace_tilde", NULL, FALSE));
 			free(tmp1);
@@ -86,7 +89,6 @@ t_bool	replace_env_var(char **cmd, char **env)
 	char	*end;
 	char	*tmp2;
 	char	*tmp;
-	t_bool	b;
 	int		i;
 	int		j;
 	int		k;
@@ -94,7 +96,6 @@ t_bool	replace_env_var(char **cmd, char **env)
 	i = 0;
 	while (cmd[i])
 	{
-		b = TRUE;
 		if (ft_strchr(cmd[i], '$'))
 		{
 			j = 0;
