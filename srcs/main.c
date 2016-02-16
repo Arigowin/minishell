@@ -4,14 +4,14 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-void		print_path(char *path, t_minishell *s, char *color)
+void		print_path(char *path, char **env, char *color)
 {
 	char	**home;
 	size_t	i;
 	t_bool	b;
 
 	b = TRUE;
-	if ((home = get_env("HOME", s)) != NULL)
+	if ((home = get_env("HOME", env)) != NULL)
 	{
 		i = 0;
 		while (path[i] && home[0][i] && path[i] == home[0][i])
@@ -22,12 +22,13 @@ void		print_path(char *path, t_minishell *s, char *color)
 			ft_putstr_color(color, ft_strsub(path, i, ft_strlen(path)));
 			b = FALSE;
 		}
+		ft_freetstring(&home);
 	}
 	if (b)
 		ft_putstr_color(color, path);
 }
 
-void		verif_env(t_minishell *s)
+void		verif_env(char ***env)
 {
 
 #ifdef DEBUG
@@ -37,21 +38,13 @@ void		verif_env(t_minishell *s)
 	char	buff[BUFF_S];
 
 	getcwd(buff, BUFF_S);
-	if (get_env("PWD", s) == NULL)
-		set_env("PWD", s, buff);
-	if (get_env("OLDPWD", s) == NULL)
-		set_env("OLDPWD", s, buff);
+	if (get_env("PWD", *env) == NULL)
+		set_env("PWD", env, buff);
+	if (get_env("OLDPWD", *env) == NULL)
+		set_env("OLDPWD", env, buff);
 }
 
-static void	init_t_minishell(t_minishell *s)
-{
-	s->env = NULL;
-	s->nbenv = 0;
-	s->paths = NULL;
-	s->prompt = "$> ";
-}
-
-static void	init_start(t_minishell *s, char **env)
+static void	init_start(char ***env, char **env2)
 {
 	char		**tmp;
 	char		*tmp2;
@@ -59,34 +52,36 @@ static void	init_start(t_minishell *s, char **env)
 
 	i = 0;
 	tmp2 = NULL;
-	while (env[i])
+	while (env2 && env2[i])
 		i++;
-	s->nbenv = ft_copyt2d(&(s->env), env, i, i);
-	verif_env(s);
-	if ((tmp = get_env("SHLVL", s)) != NULL)
+	ft_copyt2d(env, env2, i, i);
+	verif_env(env);
+	if ((tmp = get_env("SHLVL", *env)) != NULL)
 		tmp2 = ft_itoa(ft_atoi(tmp[0]) + 1);
 	else
 		tmp2 = ft_strdup("1");
 	if (tmp2 != NULL)
-		set_env("SHLVL", s, tmp2);
+		set_env("SHLVL", env, tmp2);
+	ft_strdel(&tmp2);
+	ft_freetstring(&tmp);
 }
 
-static int	start(char **env)
+static int	start(char **envarg)
 {
 	ft_putendl("DEBUG : START");
 
-	t_minishell	s;
+	char		**env;
 	t_bool		b;
 
-	init_t_minishell(&s);
-	init_start(&s, env);
+	env = NULL;
+	init_start(&env, envarg);
 	b = TRUE;
 	while (b)
 	{
-		print_prompt(&s);
-		b = body(&s);
+		print_prompt(env);
+		b = body(&env);
 	}
-	ft_freet2d(&(s.env), s.nbenv);
+	ft_freetstring(&env);
 
 	ft_putendl("DEBUG : END");
 

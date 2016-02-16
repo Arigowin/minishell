@@ -28,7 +28,7 @@ static t_bool	builtins_exit(char **t)
 	return (FALSE);
 }
 
-static t_bool	builtins_setenv(char **t, t_minishell *s)
+static t_bool	builtins_setenv(char **t, char ***env)
 {
 	int		i;
 
@@ -38,23 +38,23 @@ static t_bool	builtins_setenv(char **t, t_minishell *s)
 	if (i > 3)
 		return (ft_error(2, "Too many arguments.", NULL, TRUE));
 	if (t[1] != NULL)
-		return (set_env(t[1], s, t[2]));
+		return (set_env(t[1], env, t[2]));
 	else
-		print_env(s);
+		print_env(*env);
 	return (TRUE);
 }
 
-static t_bool	builtins_unsetenv(char **t, t_minishell *s, int i)
+static t_bool	builtins_unsetenv(char **t, char ***env, int i)
 {
 	while (t[i])
 	{
-		del_env(t[i], s);
+		del_env(t[i], env);
 		i++;
 	}
 	return (TRUE);
 }
 
-t_bool			builtins(char **t, t_minishell *s)
+t_bool			builtins(char **t, char ***env)
 {
 
 #ifdef DEBUG
@@ -63,19 +63,19 @@ t_bool			builtins(char **t, t_minishell *s)
 
 	if (ft_strequ(t[0], "exit"))
 		return (builtins_exit(t));
-	if (replace_tilde(t, s) == FALSE)
+	if (replace_tilde(t, *env) == FALSE)
 		return (FALSE);
-	if (replace_env_var(t, s) == FALSE)
+	if (replace_env_var(t, *env) == FALSE)
 		return (FALSE);
 	else if (ft_strequ(t[0], "cd"))
-		return (change_directory(t, s));
+		return (change_directory(t, env));
 	else if (ft_strequ(t[0], "setenv"))
-		return (builtins_setenv(t, s));
+		return (builtins_setenv(t, env));
 	else if (ft_strequ(t[0], "unsetenv"))
-		return (builtins_unsetenv(t, s, 1));
+		return (builtins_unsetenv(t, env, 1));
 	else if ((ft_strequ(t[0], "env") && ft_strequ(t[1], "-u")))
-		return (builtins_unsetenv(t, s, 2));
+		return (builtins_unsetenv(t, env, 2));
 	else if (ft_strequ(t[0], "env") && ft_strchr(t[1], '-') == NULL)
-		return (builtins_env(s));
+		return (builtins_env(*env));
 	return (2);
 }

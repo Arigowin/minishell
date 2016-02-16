@@ -1,8 +1,8 @@
 #include "minishell.h"
 #include "libft.h"
 
-t_bool	builtins_env(t_minishell *s)
+t_bool	builtins_env(char **env)
 {
-	print_env(s);
+	print_env(env);
 	return (TRUE);
 }

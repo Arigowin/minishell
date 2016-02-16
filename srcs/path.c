@@ -4,8 +4,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
-void	take_path_in_file(t_minishell *s)
+static char		**take_path_in_file()
 {
 	char	buff[BUFF_S];
 	int		ret_read;
@@ -13,10 +14,22 @@ void	take_path_in_file(t_minishell *s)
 
 	fd = open("/etc/paths", O_RDONLY);
 	if ((ret_read = read(fd, buff, BUFF_S)) > 0)
-		s->paths = ft_strsplit(buff, '\n');
+		return (ft_strsplit(buff, '\n'));
+	close(fd);
+	return (NULL);
 }
 
-char	*format_path_exe(char *path, char *cmd)
+char			**take_path(char **env)
+{
+	char	**paths;
+
+	paths = NULL;
+	if ((paths = get_env("PATH", env)) == NULL)
+		paths = take_path_in_file();
+	return (paths);
+}
+
+char			*format_path_exe(char *path, char *cmd)
 {
 
 #ifdef DEBUG
@@ -29,7 +42,7 @@ char	*format_path_exe(char *path, char *cmd)
 	ret = NULL;
 	tmp = NULL;
 	if (cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/') || path == NULL)
-		return (cmd);
+		return (ft_strdup(cmd));
 	if (path[ft_strlen(path) - 1] != '/')
 	{
 		if ((tmp = ft_strjoin(path, "/")) == NULL)
@@ -41,7 +54,7 @@ char	*format_path_exe(char *path, char *cmd)
 	return (ret);
 }
 
-char	*search_exe(char **paths, char *exe)
+char			*search_exe(char **paths, char *exe)
 {
 
 #ifdef DEBUG
@@ -56,7 +69,7 @@ char	*search_exe(char **paths, char *exe)
 	i = 0;
 	b = FALSE;
 	if (exe != NULL && (exe[0] == '/' || (exe[0] == '.' && exe[1] == '/')))
-		return (exe);
+		return (ft_strdup(exe));
 	while (exe != NULL && paths[i] != NULL && !b)
 	{
 		if ((dir = opendir(paths[i])) != NULL)
@@ -64,13 +77,15 @@ char	*search_exe(char **paths, char *exe)
 			while ((dp = readdir(dir)) != NULL && !b)
 			{
 				if (ft_strequ(dp->d_name, exe))
+				{
 					b = TRUE;
+				}
 			}
 			closedir(dir);
 		}
 		i++;
 	}
 	if (b)
-		return (paths[i - 1]);
+		return (ft_strdup(paths[i - 1]));
 	return (NULL);
 }

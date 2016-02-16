@@ -41,8 +41,8 @@ static char		**lst_to_tstring(t_lstcmd **lst, int nbelem)
 #endif
 
 	t_lstcmd	*tmp;
-	char	**ret;
-	int		i;
+	char		**ret;
+	int			i;
 
 	if ((ret = (char **)malloc(sizeof(char *) * (nbelem + 1))) == NULL)
 		return (NULL);

@@ -20,6 +20,7 @@ t_bool	readline(char ***t)
 		{
 			if ((*t = lexer(line, SEP)) == NULL)
 				return (FALSE);
+			ft_strdel(&line);
 		}
 		else if (line == NULL)
 			return (FALSE);
@@ -29,7 +30,7 @@ t_bool	readline(char ***t)
 	return (TRUE);
 }
 
-t_bool	replace_tilde(char **paths, t_minishell *s)
+t_bool	replace_tilde(char **paths, char **env)
 {
 
 #ifdef DEBUG
@@ -46,7 +47,7 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 		if (ft_strequ(paths[i], "~-"))
 		{
 			ft_strdel(&paths[i]);
-			if ((home = get_env("OLDPWD", s)) == NULL)
+			if ((home = get_env("OLDPWD", env)) == NULL)
 					return (TRUE);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
@@ -55,7 +56,7 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 		else if (ft_strequ(paths[i], "~+"))
 		{
 			ft_strdel(&paths[i]);
-			if ((home = get_env("PWD", s)) == NULL)
+			if ((home = get_env("PWD", env)) == NULL)
 					return (TRUE);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
@@ -66,7 +67,7 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 			if ((tmp1 = ft_strsub(paths[i], 1, ft_strlen(paths[i]))) == NULL)
 				return (ft_error(0, "ERROR : strsub replace_tilde", NULL, FALSE));
 			ft_strdel(&paths[i]);
-			if ((home = get_env("HOME", s)) == NULL)
+			if ((home = get_env("HOME", env)) == NULL)
 					return (TRUE);
 			if ((paths[i] = ft_strjoin(home[0], tmp1)) == NULL)
 				return (ft_error(0, "ERROR : strjoin replace_tilde", NULL, FALSE));
@@ -78,7 +79,7 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 	return (TRUE);
 }
 
-t_bool	replace_env_var(char **paths, t_minishell *s)
+t_bool	replace_env_var(char **paths, char **env)
 {
 	char	*var;
 	char	*start;
@@ -107,7 +108,7 @@ t_bool	replace_env_var(char **paths, t_minishell *s)
 				return (ft_error(0, "ERROR : strsub2 replace_env_var", NULL, FALSE));
 			if ((end = ft_strsub(paths[i], k, ft_strlen(paths[i]))) == NULL)
 				return (ft_error(0, "ERROR : strsub3 replace_env_var", NULL, FALSE));
-			tmp2 = get_env(var, s);
+			tmp2 = get_env(var, env);
 			ft_strdel(&(paths[i]));
 			if (tmp2 != NULL && tmp2[0] != NULL)
 			{
@@ -119,6 +120,10 @@ t_bool	replace_env_var(char **paths, t_minishell *s)
 				if ((paths[i] = ft_strjoin(start, end)) == NULL)
 					return (ft_error(0, "ERROR : strjoin2 replace_env_var", NULL, FALSE));
 			}
+			ft_freetstring(&tmp2);
+			ft_strdel(&var);
+			ft_strdel(&start);
+			ft_strdel(&end);
 		}
 		if (ft_strchr(paths[i], '$') == NULL)
 			i++;

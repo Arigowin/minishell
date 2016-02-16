@@ -1,17 +1,20 @@
 #include "minishell.h"
 #include "libft.h"
 
+#include <stdlib.h>
 #include <stdio.h>
-static t_bool	format_and_exec_cmd(char **t, t_minishell *s)
+static t_bool	format_and_exec_cmd(char **t, char **env)
 {
 	char	*tmp;
 	char	*tmp2;
+	char	**paths;
 	int		ret_exec;
 
-	if ((s->paths = get_env("PATH", s)) == NULL)
-		take_path_in_file(s);
-	if ((tmp = search_exe(s->paths, t[0])) == NULL)
+	if ((paths = take_path(env)) == NULL)
+		return (ft_error(0, "not PATH found", t[0], TRUE));
+	if ((tmp = search_exe(paths, t[0])) == NULL)
 		return (ft_error(0, "command not found: ", t[0], TRUE));
+	ft_freetstring(&paths);
 	if ((tmp2 = format_path_exe(tmp, t[0])) == NULL)
 		return (TRUE);
 	ft_strdel(&tmp);
@@ -22,14 +25,14 @@ static t_bool	format_and_exec_cmd(char **t, t_minishell *s)
 	}
 	else
 	{
-		if ((ret_exec = execprog(tmp2, t, s->env)) == -1)
+		if ((ret_exec = execprog(tmp2, t, env)) == -1)
 			return (ft_error(0, "exec format error: ", t[0], TRUE));
 	}
-	ft_strdel(&tmp2);
+	free(tmp2);
 	return (TRUE);
 }
 
-t_bool			body(t_minishell *s)
+t_bool			body(char ***env)
 {
 	char		**t;
 	t_bool		b;
@@ -39,7 +42,7 @@ t_bool			body(t_minishell *s)
 		return (FALSE);
 	if (t == NULL || t[0] == NULL)
 		return (TRUE);
-	if ((b = builtins(t, s)) == TRUE)
+	if ((b = builtins(t, env)) == TRUE)
 	{
 		ft_freetstring(&t);
 		return (TRUE);
@@ -49,7 +52,7 @@ t_bool			body(t_minishell *s)
 		ft_freetstring(&t);
 		return (FALSE);
 	}
-	if (format_and_exec_cmd(t, s) == TRUE)
+	if (format_and_exec_cmd(t, *env) == TRUE)
 	{
 		ft_freetstring(&t);
 		return (TRUE);
