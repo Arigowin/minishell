@@ -6,7 +6,8 @@
 
 void		print_path(char *path, char **env, char *color)
 {
-	char	**home;
+	char	*home;
+	char	*tmp;
 	size_t	i;
 	t_bool	b;
 
@@ -14,15 +15,17 @@ void		print_path(char *path, char **env, char *color)
 	if ((home = get_env("HOME", env)) != NULL)
 	{
 		i = 0;
-		while (path[i] && home[0][i] && path[i] == home[0][i])
+		while (path[i] && home[i] && path[i] == home[i])
 			i++;
-		if (i == ft_strlen(home[0]))
+		if (i == ft_strlen(home))
 		{
 			ft_putstr_color(color, "~");
-			ft_putstr_color(color, ft_strsub(path, i, ft_strlen(path)));
+			tmp = ft_strsub(path, i, ft_strlen(path));
+			ft_putstr_color(color, tmp);
+			free(tmp);
 			b = FALSE;
 		}
-		ft_freetstring(&home);
+		free(home);
 	}
 	if (b)
 		ft_putstr_color(color, path);
@@ -36,17 +39,21 @@ void		verif_env(char ***env)
 #endif
 
 	char	buff[BUFF_S];
+	char	*tmp;
 
+	tmp = NULL;
 	getcwd(buff, BUFF_S);
-	if (get_env("PWD", *env) == NULL)
+	if ((tmp = get_env("PWD", *env)) == NULL)
 		set_env("PWD", env, buff);
-	if (get_env("OLDPWD", *env) == NULL)
+	free(tmp);
+	if ((tmp = get_env("OLDPWD", *env)) == NULL)
 		set_env("OLDPWD", env, buff);
+	free(tmp);
 }
 
 static void	init_start(char ***env, char **env2)
 {
-	char		**tmp;
+	char		*tmp;
 	char		*tmp2;
 	size_t		i;
 
@@ -57,13 +64,13 @@ static void	init_start(char ***env, char **env2)
 	ft_copyt2d(env, env2, i, i);
 	verif_env(env);
 	if ((tmp = get_env("SHLVL", *env)) != NULL)
-		tmp2 = ft_itoa(ft_atoi(tmp[0]) + 1);
+		tmp2 = ft_itoa(ft_atoi(tmp) + 1);
 	else
 		tmp2 = ft_strdup("1");
 	if (tmp2 != NULL)
 		set_env("SHLVL", env, tmp2);
 	ft_strdel(&tmp2);
-	ft_freetstring(&tmp);
+	free(tmp);
 }
 
 static int	start(char **envarg)

@@ -2,11 +2,12 @@
 #include "libft.h"
 #include <stdlib.h>
 
-static t_bool	builtins_exit(char **t)
+static t_bool	builtins_exit(char **t, char ***env)
 {
 	size_t	i;
 
 	ft_putendl("exit");
+	ft_freetstring(env);
 	i = 0;
 	if (t[1] != NULL)
 	{
@@ -62,7 +63,7 @@ t_bool			builtins(char **t, char ***env)
 #endif
 
 	if (ft_strequ(t[0], "exit"))
-		return (builtins_exit(t));
+		return (builtins_exit(t, env));
 	if (replace_tilde(t, *env) == FALSE)
 		return (FALSE);
 	if (replace_env_var(t, *env) == FALSE)

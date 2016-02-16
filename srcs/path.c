@@ -22,10 +22,17 @@ static char		**take_path_in_file()
 char			**take_path(char **env)
 {
 	char	**paths;
+	char	*tmp;
 
 	paths = NULL;
-	if ((paths = get_env("PATH", env)) == NULL)
+	if ((tmp = get_env("PATH", env)) == NULL)
 		paths = take_path_in_file();
+	else
+	{
+		if ((paths = ft_strsplit(tmp, ':')) == NULL)
+			return (NULL);
+		free(tmp);
+	}
 	return (paths);
 }
 

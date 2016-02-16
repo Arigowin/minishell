@@ -1,6 +1,7 @@
 #include "minishell.h"
 #include "libft.h"
 #include <unistd.h>
+#include <stdlib.h>
 
 static int		replace_minus(char **paths, char ***env)
 {
@@ -9,7 +10,7 @@ static int		replace_minus(char **paths, char ***env)
 	ft_putendl("DEBUG : replace_minus");
 #endif
 
-	char	**oldpwd;
+	char	*oldpwd;
 	int		i;
 	int		pos;
 	int		nb_minus;
@@ -26,10 +27,10 @@ static int		replace_minus(char **paths, char ***env)
 			{
 				verif_env(env);
 				oldpwd = get_env("OLDPWD", *env);
-				if ((paths[i] = ft_strdup(oldpwd[0])) == NULL)
+				if ((paths[i] = ft_strdup(oldpwd)) == NULL)
 					return (ft_error(0, "strdup replace_minus", paths[i], FALSE) - 1);
 				pos = i;
-				ft_freetstring(&oldpwd);
+				free(oldpwd);
 			}
 			nb_minus++;
 		}
@@ -53,7 +54,7 @@ t_bool			change_directory(char **cmd, char ***env)
 	int		i;
 	int		nb_minus;
 	char	buff[BUFF_S];
-	char	**tmp;
+	char	*tmp;
 
 	i = 0;
 	while (cmd[i])
@@ -69,9 +70,9 @@ t_bool			change_directory(char **cmd, char ***env)
 			ft_putendl("cd: No home directory.");
 			return (TRUE);
 		}
-		if (chdir(tmp[0]) == -1)
+		if (chdir(tmp) == -1)
 			return (FALSE);
-		ft_freetstring(&tmp);
+		free(tmp);
 	}
 	i = 1;
 	while (cmd[i])
@@ -85,8 +86,8 @@ t_bool			change_directory(char **cmd, char ***env)
 	verif_env(env);
 	getcwd(buff, BUFF_S);
 	tmp = get_env("PWD", *env);
-	modif_env("OLDPWD", env, tmp[0]);
-	ft_freetstring(&tmp);
+	modif_env("OLDPWD", env, tmp);
+	free(tmp);
 	modif_env("PWD", env, buff);
 	return (TRUE);
 }

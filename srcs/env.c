@@ -23,7 +23,31 @@ size_t	nb_env(char **env)
 	return (i);
 }
 
-char	**get_env(char *name, char **env)
+t_bool	env_exist(char *name, char **env)
+{
+	t_bool	b;
+	size_t	i;
+	size_t	len;
+	size_t	nbenv;
+	char	*tmp;
+
+	nbenv = nb_env(env);
+	b = FALSE;
+	i = 0;
+	while (!b && i < nbenv)
+	{
+		len = len_to_equal(env[i]);
+		if ((tmp = ft_strsub(env[i], 0, len - 1)) == NULL)
+			return (FALSE);
+		if (ft_strcmp(tmp, name) == 0)
+			b = TRUE;
+		ft_strdel(&tmp);
+		i++;
+	}
+	return (b);
+}
+
+char	*get_env(char *name, char **env)
 {
 
 #ifdef DEBUG
@@ -31,7 +55,7 @@ char	**get_env(char *name, char **env)
 	ft_putendl(name);
 #endif
 
-	char	**ret;
+	char	*ret;
 	char	*tmp;
 	size_t	i;
 	size_t	len;
@@ -50,19 +74,15 @@ char	**get_env(char *name, char **env)
 		if (ft_strcmp(tmp, name) == 0)
 		{
 			b = TRUE;
-			ft_strdel(&tmp);
-			if ((tmp = ft_strsub(env[i], len, ft_strlen(env[i]))) == NULL)
+			if ((ret = ft_strsub(env[i], len, ft_strlen(env[i]))) == NULL)
 				b = ft_error(0, "ERROR : strsub get_env", env[i], FALSE);
-			if ((ret = ft_strsplit(tmp, ':')) == NULL)
-				b = ft_error(0, "ERROR : strsplit get_env", env[i], FALSE);
-			break ;
+			i = nbenv;
 		}
 		ft_strdel(&tmp);
 		i++;
 	}
 	if (b == FALSE)
 		return (NULL);
-	ft_strdel(&tmp);
 	return (ret);
 }
 
@@ -209,16 +229,22 @@ t_bool	set_env(char *name, char ***env, char *str)
 #endif
 
 	size_t	i;
+	char	*tmp;
 
 	i = 0;
+	tmp = NULL;
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]))
 			return (ft_error(2, "Variable name must contain alphanumeric characters.", NULL, TRUE));
 		i++;
 	}
-	if (get_env(name, *env) == NULL)
+	if ((tmp = get_env(name, *env)) == NULL)
+	{
+		free(tmp);
 		return (add_env(name, env, str));
+	}
+	free(tmp);
 	return (modif_env(name, env, str));
 }
 

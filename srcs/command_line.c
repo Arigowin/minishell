@@ -37,7 +37,7 @@ t_bool	replace_tilde(char **paths, char **env)
 	ft_putendl("DEBUG : replace_tilde");
 #endif
 
-	char	**home;
+	char	*home;
 	char	*tmp1;
 	int		i;
 
@@ -49,18 +49,18 @@ t_bool	replace_tilde(char **paths, char **env)
 			ft_strdel(&paths[i]);
 			if ((home = get_env("OLDPWD", env)) == NULL)
 					return (TRUE);
-			if ((paths[i] = ft_strdup(home[0])) == NULL)
+			if ((paths[i] = ft_strdup(home)) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
-			ft_freetstring(&home);
+			free(home);
 		}
 		else if (ft_strequ(paths[i], "~+"))
 		{
 			ft_strdel(&paths[i]);
 			if ((home = get_env("PWD", env)) == NULL)
 					return (TRUE);
-			if ((paths[i] = ft_strdup(home[0])) == NULL)
+			if ((paths[i] = ft_strdup(home)) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
-			ft_freetstring(&home);
+			free(home);
 		}
 		else if (paths[i][0] == '~')
 		{
@@ -69,63 +69,63 @@ t_bool	replace_tilde(char **paths, char **env)
 			ft_strdel(&paths[i]);
 			if ((home = get_env("HOME", env)) == NULL)
 					return (TRUE);
-			if ((paths[i] = ft_strjoin(home[0], tmp1)) == NULL)
+			if ((paths[i] = ft_strjoin(home, tmp1)) == NULL)
 				return (ft_error(0, "ERROR : strjoin replace_tilde", NULL, FALSE));
 			free(tmp1);
-			ft_freetstring(&home);
+			free(home);
 		}
 		i++;
 	}
 	return (TRUE);
 }
 
-t_bool	replace_env_var(char **paths, char **env)
+t_bool	replace_env_var(char **cmd, char **env)
 {
 	char	*var;
 	char	*start;
 	char	*end;
-	char	**tmp2;
+	char	*tmp2;
 	t_bool	b;
 	int		i;
 	int		j;
 	int		k;
 
 	i = 0;
-	while (paths[i])
+	while (cmd[i])
 	{
 		b = TRUE;
-		if (ft_strchr(paths[i], '$'))
+		if (ft_strchr(cmd[i], '$'))
 		{
 			j = 0;
-			while (paths[i][j] != '\0' && paths[i][j] != '$')
+			while (cmd[i][j] != '\0' && cmd[i][j] != '$')
 				j++;
-			if ((start = ft_strsub(paths[i], 0, j)) == NULL)
+			if ((start = ft_strsub(cmd[i], 0, j)) == NULL)
 				return (ft_error(0, "ERROR : strsub1 replace_env_var", NULL, FALSE));
 			k = j;
-			while (paths[i][k] != '\0' && paths[i][k] != '/')
+			while (cmd[i][k] != '\0' && cmd[i][k] != '/')
 				k++;
-			if ((var = ft_strsub(paths[i], j + 1, k - j - 1)) == NULL)
+			if ((var = ft_strsub(cmd[i], j + 1, k - j - 1)) == NULL)
 				return (ft_error(0, "ERROR : strsub2 replace_env_var", NULL, FALSE));
-			if ((end = ft_strsub(paths[i], k, ft_strlen(paths[i]))) == NULL)
+			if ((end = ft_strsub(cmd[i], k, ft_strlen(cmd[i]))) == NULL)
 				return (ft_error(0, "ERROR : strsub3 replace_env_var", NULL, FALSE));
 			tmp2 = get_env(var, env);
-			ft_strdel(&(paths[i]));
-			if (tmp2 != NULL && tmp2[0] != NULL)
+			ft_strdel(&(cmd[i]));
+			if (tmp2 != NULL)
 			{
-				if ((paths[i] = ft_strjoin(ft_strjoin(start, tmp2[0]), end)) == NULL)
+				if ((cmd[i] = ft_strjoin(ft_strjoin(start, tmp2), end)) == NULL)
 					return (ft_error(0, "ERROR : strjoin1 replace_env_var", NULL, FALSE));
+				free(tmp2);
 			}
 			else
 			{
-				if ((paths[i] = ft_strjoin(start, end)) == NULL)
+				if ((cmd[i] = ft_strjoin(start, end)) == NULL)
 					return (ft_error(0, "ERROR : strjoin2 replace_env_var", NULL, FALSE));
 			}
-			ft_freetstring(&tmp2);
 			ft_strdel(&var);
 			ft_strdel(&start);
 			ft_strdel(&end);
 		}
-		if (ft_strchr(paths[i], '$') == NULL)
+		if (ft_strchr(cmd[i], '$') == NULL)
 			i++;
 	}
 	return (TRUE);

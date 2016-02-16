@@ -39,7 +39,7 @@ t_bool				replace_env_var(char **path, char **env);
 
 // in env.c
 size_t				len_to_equal(char *str);
-char				**get_env(char *name, char **env);
+char				*get_env(char *name, char **env);
 t_bool				modif_env(char *name, char ***env, char *str);
 t_bool				del_env(char *name, char ***env);
 t_bool				add_env(char *name, char ***env, char *str);
