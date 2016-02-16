@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/26 13:00:09 by dolewski          #+#    #+#             */
-/*   Updated: 2015/12/14 13:08:03 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/02/16 18:25:00 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static size_t		nb_word(const char *s, char c)
 	{
 		while (s[i])
 		{
-			if (s[i] != c && s[i - 1] == c)
+			if ((i == 0 && s[i] != c) || (s[i] != c && s[i - 1] == c))
 				nb++;
 			i++;
 		}

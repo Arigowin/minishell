@@ -229,22 +229,16 @@ t_bool	set_env(char *name, char ***env, char *str)
 #endif
 
 	size_t	i;
-	char	*tmp;
 
 	i = 0;
-	tmp = NULL;
 	while (name[i])
 	{
 		if (!ft_isalnum(name[i]))
 			return (ft_error(2, "Variable name must contain alphanumeric characters.", NULL, TRUE));
 		i++;
 	}
-	if ((tmp = get_env(name, *env)) == NULL)
-	{
-		free(tmp);
+	if (env_exist(name, *env) == FALSE)
 		return (add_env(name, env, str));
-	}
-	free(tmp);
 	return (modif_env(name, env, str));
 }
 

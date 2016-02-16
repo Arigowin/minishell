@@ -29,7 +29,7 @@ char			**take_path(char **env)
 		paths = take_path_in_file();
 	else
 	{
-		if ((paths = ft_strsplit(tmp, ':')) == NULL)
+		if ((paths = lexer(tmp, ":")) == NULL)
 			return (NULL);
 		free(tmp);
 	}

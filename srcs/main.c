@@ -39,16 +39,12 @@ void		verif_env(char ***env)
 #endif
 
 	char	buff[BUFF_S];
-	char	*tmp;
 
-	tmp = NULL;
 	getcwd(buff, BUFF_S);
-	if ((tmp = get_env("PWD", *env)) == NULL)
+	if (env_exist("PWD", *env) == FALSE)
 		set_env("PWD", env, buff);
-	free(tmp);
-	if ((tmp = get_env("OLDPWD", *env)) == NULL)
+	if (env_exist("OLDPWD", *env) == FALSE)
 		set_env("OLDPWD", env, buff);
-	free(tmp);
 }
 
 static void	init_start(char ***env, char **env2)

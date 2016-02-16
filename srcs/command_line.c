@@ -85,6 +85,7 @@ t_bool	replace_env_var(char **cmd, char **env)
 	char	*start;
 	char	*end;
 	char	*tmp2;
+	char	*tmp;
 	t_bool	b;
 	int		i;
 	int		j;
@@ -109,12 +110,15 @@ t_bool	replace_env_var(char **cmd, char **env)
 			if ((end = ft_strsub(cmd[i], k, ft_strlen(cmd[i]))) == NULL)
 				return (ft_error(0, "ERROR : strsub3 replace_env_var", NULL, FALSE));
 			tmp2 = get_env(var, env);
-			ft_strdel(&(cmd[i]));
+			free(cmd[i]);
 			if (tmp2 != NULL)
 			{
-				if ((cmd[i] = ft_strjoin(ft_strjoin(start, tmp2), end)) == NULL)
+				if ((tmp = ft_strjoin(start, tmp2)) == NULL)
+					return (ft_error(0, "ERROR : strjoin0 replace_env_var", NULL, FALSE));
+				if ((cmd[i] = ft_strjoin(tmp, end)) == NULL)
 					return (ft_error(0, "ERROR : strjoin1 replace_env_var", NULL, FALSE));
 				free(tmp2);
+				free(tmp);
 			}
 			else
 			{
@@ -125,7 +129,7 @@ t_bool	replace_env_var(char **cmd, char **env)
 			ft_strdel(&start);
 			ft_strdel(&end);
 		}
-		if (ft_strchr(cmd[i], '$') == NULL)
+		else
 			i++;
 	}
 	return (TRUE);
