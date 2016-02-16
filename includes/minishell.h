@@ -74,6 +74,9 @@ void				print_prompt(t_minishell *s);
 // builtins_env.c
 t_bool				builtins_env(t_minishell *s);
 
+// free.c
+void				ft_freetstring(char ***tab);
+
 
 #endif
 

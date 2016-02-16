@@ -11,32 +11,33 @@ static int		replace_minus(char **paths, t_minishell *s)
 
 	char	**oldpwd;
 	int		i;
-	char	*tmp;
+	int		pos;
 	int		nb_minus;
 
 	i = 0;
 	nb_minus = 0;
-	tmp = NULL;
+	pos = 0;
 	while (paths[i])
 	{
 		if (ft_strequ(paths[i], "-"))
 		{
 			ft_strdel(&paths[i]);
-			if (tmp == NULL)
+			if (pos == 0)
 			{
 				verif_env(s);
 				oldpwd = get_env("OLDPWD", s);
 				if ((paths[i] = ft_strdup(oldpwd[0])) == NULL)
 					return (ft_error(0, "strdup replace_minus", paths[i], FALSE) - 1);
-				tmp = paths[i];
+				pos = i;
+				ft_freetstring(&oldpwd);
 			}
 			nb_minus++;
 		}
 		i++;
 	}
-	if (tmp != NULL)
+	if (pos != 0)
 	{
-		print_path(tmp, s, "");
+		print_path(paths[pos], s, "");
 		ft_putendl("");
 	}
 	return (nb_minus);
@@ -50,9 +51,9 @@ t_bool			change_directory(char **cmd, t_minishell *s)
 #endif
 
 	int		i;
+	int		nb_minus;
 	char	buff[BUFF_S];
 	char	**tmp;
-	int		nb_minus;
 
 	i = 0;
 	while (cmd[i])
@@ -70,6 +71,7 @@ t_bool			change_directory(char **cmd, t_minishell *s)
 		}
 		if (chdir(tmp[0]) == -1)
 			return (FALSE);
+		ft_freetstring(&tmp);
 	}
 	i = 1;
 	while (cmd[i])
@@ -84,6 +86,7 @@ t_bool			change_directory(char **cmd, t_minishell *s)
 	getcwd(buff, BUFF_S);
 	tmp = get_env("PWD", s);
 	modif_env("OLDPWD", s, tmp[0]);
+	ft_freetstring(&tmp);
 	modif_env("PWD", s, buff);
 	return (TRUE);
 }

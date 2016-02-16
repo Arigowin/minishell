@@ -50,6 +50,7 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 					return (TRUE);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
+			ft_freetstring(&home);
 		}
 		else if (ft_strequ(paths[i], "~+"))
 		{
@@ -58,6 +59,7 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 					return (TRUE);
 			if ((paths[i] = ft_strdup(home[0])) == NULL)
 				return (ft_error(0, "ERROR : strdup replace tilde", paths[i], FALSE));
+			ft_freetstring(&home);
 		}
 		else if (paths[i][0] == '~')
 		{
@@ -68,6 +70,8 @@ t_bool	replace_tilde(char **paths, t_minishell *s)
 					return (TRUE);
 			if ((paths[i] = ft_strjoin(home[0], tmp1)) == NULL)
 				return (ft_error(0, "ERROR : strjoin replace_tilde", NULL, FALSE));
+			free(tmp1);
+			ft_freetstring(&home);
 		}
 		i++;
 	}
