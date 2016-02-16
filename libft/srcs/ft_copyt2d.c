@@ -6,7 +6,7 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/11 11:14:44 by dolewski          #+#    #+#             */
-/*   Updated: 2016/02/16 15:26:19 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/02/16 19:11:28 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@
 int		ft_copyt2d(char ***t1, char **t2, size_t size, size_t new_size)
 {
 	size_t	i;
-	size_t	len;
 
 	i = 0;
-	len = 0;
 	if ((*t1 = (char **)malloc(sizeof(char *) * (new_size + 1))) ==
 			NULL)
 		return (-1);
