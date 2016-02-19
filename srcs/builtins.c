@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include "libft.h"
 
-static void		initptfunc(t_bool (*tab[5])(char **, char ***))
+static void		initptfunc(t_ptfu tab[5])
 {
 	tab[0] = &builtins_exit;
 	tab[1] = &builtins_setenv;
@@ -10,10 +10,19 @@ static void		initptfunc(t_bool (*tab[5])(char **, char ***))
 	tab[4] = &change_directory;
 }
 
+static void		initname(char *name[5])
+{
+	name[0] = "exit";
+	name[1] = "setenv";
+	name[2] = "unsetenv";
+	name[3] = "env";
+	name[4] = "cd";
+}
+
 t_bool			builtins(char **t, char ***env)
 {
 	t_ptfu	tab[5];
-	char	*name[5] = {"exit", "setenv", "unsetenv", "env", "cd"};
+	char	*name[5];
 	int		i;
 
 	if (replace_tilde(t, *env) == FALSE)
@@ -21,6 +30,7 @@ t_bool			builtins(char **t, char ***env)
 	if (replace_env_var(t, *env) == FALSE)
 		return (FALSE);
 	initptfunc(tab);
+	initname(name);
 	i = 0;
 	while (i < 5)
 	{
