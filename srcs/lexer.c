@@ -58,42 +58,47 @@ static char		**lst_to_tstring(t_lstcmd **lst, int nbelem)
 	return (ret);
 }
 
+void			lexer2(size_t (*j)[], char *sc, t_lstcmd **lst, char tmp[])
+{
+	if (ft_strchr(sc, (*j)[0]))
+	{
+		if (tmp[0] != '\0')
+		{
+			lstcmdadd(lst, tmp);
+			ft_bzero(tmp, BUFF_S);
+			(*j)[1] = 0;
+			(*j)[2]++;
+		}
+	}
+	else
+	{
+		tmp[(*j)[1]] = (*j)[0];
+		(*j)[1]++;
+	}
+}
+
 char			**lexer(char *str, char *sc)
 {
 	char		tmp[BUFF_S];
 	t_lstcmd	*lst;
 	size_t		i;
-	size_t		j;
-	size_t		k;
+	size_t		j[3];
 
 	i = 0;
-	j = 0;
-	k = 0;
+	j[1] = 0;
+	j[2] = 0;
 	lst = NULL;
 	ft_bzero(tmp, BUFF_S);
 	while (str && str[i])
 	{
-		if (ft_strchr(sc, str[i]))
-		{
-			if (tmp[0] != '\0')
-			{
-				lstcmdadd(&lst, tmp);
-				ft_bzero(tmp, BUFF_S);
-				j = 0;
-				k++;
-			}
-		}
-		else
-		{
-			tmp[j] = str[i];
-			j++;
-		}
+		j[0] = str[i];
+		lexer2(&j, sc, &lst, tmp);
 		i++;
 	}
 	if (tmp[0] != '\0')
 	{
 		lstcmdadd(&lst, tmp);
-		k++;
+		j[2]++;
 	}
-	return (lst_to_tstring(&lst, k));
+	return (lst_to_tstring(&lst, j[2]));
 }
