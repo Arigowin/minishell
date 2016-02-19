@@ -31,6 +31,7 @@ SRC = body.c \
 	get_env.c \
 	lexer.c \
 	main.c \
+	modif_env.c \
 	path.c \
 	prompt.c \
 	replace_env_var.c \

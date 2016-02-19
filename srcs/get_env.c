@@ -8,6 +8,7 @@ static t_bool		get_env_bis(int i, char **env, char *name, char **ret)
 	char	*tmp;
 	t_bool	b;
 
+	b = FALSE;
 	nbenv = nb_env(env);
 	len = len_to_equal(env[i]);
 	if ((tmp = ft_strsub(env[i], 0, len - 1)) == NULL)
@@ -20,7 +21,7 @@ static t_bool		get_env_bis(int i, char **env, char *name, char **ret)
 		i = nbenv;
 	}
 	ft_strdel(&tmp);
-	return (TRUE);
+	return (b);
 }
 
 char				*get_env(char *name, char **env)
@@ -34,9 +35,9 @@ char				*get_env(char *name, char **env)
 	i = 0;
 	ret = NULL;
 	b = FALSE;
-	while (i < nbenv)
+	while (i < nbenv && !b)
 	{
-		get_env_bis(i, env, name, &ret);
+		b = get_env_bis(i, env, name, &ret);
 		i++;
 	}
 	if (b == FALSE)
