@@ -8,6 +8,7 @@
 # include <sys/types.h>
 
 typedef char	t_bool;
+typedef t_bool	(*t_ptfu) (char **, char ***);
 
 typedef struct		s_lstcmd
 {
