@@ -1,13 +1,42 @@
 #include "minishell.h"
 #include "libft.h"
 
+t_bool	modif_env_2(char ***env, int i, char *str, char *tmp)
+{
+	ft_strdel(&((*env)[i]));
+	if (str != NULL)
+	{
+		if (((*env)[i] = ft_strjoin(tmp, str)) == NULL)
+			return (ft_error(0, "ERROR : JOIN", NULL, FALSE));
+	}
+	else
+	{
+		if (((*env)[i] = ft_strdup(tmp)) == NULL)
+			return (ft_error(0, "ERROR : DUP", NULL, FALSE));
+	}
+	return (TRUE);
+}
+
+t_bool	modif_env_3(char ***env, int i, char *name, char *str)
+{
+	char	*tmp;
+
+	ft_strdel(&((*env)[i]));
+	if ((tmp = ft_strjoin(name, "=")) == NULL)
+		return (ft_error(0, "ERROR : JOIN", NULL, FALSE));
+	if (((*env)[i] = ft_strjoin(tmp, str)) == NULL)
+		return (ft_error(0, "ERROR : JOIN", NULL, FALSE));
+	ft_strdel(&tmp);
+	return (TRUE);
+}
+
 t_bool	modif_env(char *name, char ***env, char *str)
 {
 	char	*tmp;
 	size_t	i;
 	size_t	len;
-	t_bool	b;
 	size_t	nbenv;
+	t_bool	b;
 
 	nbenv = nb_env(*env);
 	i = 0;
@@ -16,34 +45,13 @@ t_bool	modif_env(char *name, char ***env, char *str)
 	{
 		len = len_to_equal((*env)[i]);
 		if ((tmp = ft_strsub((*env)[i], 0, len)) == NULL)
-			return (ft_error(0, "ERROR : strsub modif_env", NULL, FALSE));
+			return (ft_error(0, "ERROR : SUB", NULL, FALSE));
 		if (ft_strcmp(tmp, name) == '=')
-		{
-			ft_strdel(&((*env)[i]));
-			b = TRUE;
-			if (str != NULL)
-			{
-				if (((*env)[i] = ft_strjoin(tmp, str)) == NULL)
-					return (ft_error(0, "ERROR : strjoin modif_env", NULL, FALSE));
-			}
-			else
-			{
-				if (((*env)[i] = ft_strdup(tmp)) == NULL)
-					return (ft_error(0, "ERROR : strdup modif_env", NULL, FALSE));
-			}
-		}
+			b = modif_env_2(env, i, str, tmp);
 		ft_strdel(&tmp);
 		i++;
 	}
 	if (!b)
-	{
-		ft_strdel(&((*env)[i]));
-		if ((tmp = ft_strjoin(name, "=")) == NULL)
-			return (ft_error(0, "ERROR : strjoin modif_env", NULL, FALSE));
-		if (((*env)[i] = ft_strjoin(tmp, str)) == NULL)
-			return (ft_error(0, "ERROR : strjoin modif_env", NULL, FALSE));
-		ft_strdel(&tmp);
-		b = TRUE;
-	}
+		b = modif_env_3(env, i, name, str);
 	return (b);
 }
