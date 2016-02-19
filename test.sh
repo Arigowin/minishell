@@ -1,49 +1,56 @@
 #!/bin/zsh
 
-echo 'ls -l'
+echo 'echo ls -l'
 echo 'ls -l' | ./minishell
 read -n 1 -s
 
-echo 'ls'
+echo 'echo ls'
 echo 'ls' | ./minishell
 read -n 1 -s
 
-echo '/bin/ls'
+echo 'echo /bin/ls'
 echo '/bin/ls' | ./minishell
 read -n 1 -s
 
-echo 'echo $HOME/$SHLVL/$HOME $SHLVL'
+echo 'echo echo $HOME/$SHLVL/$HOME $SHLVL'
 echo 'echo $HOME/$SHLVL/$HOME $SHLVL' | ./minishell
 read -n 1 -s
 
-echo 'cat auteur'
+echo 'echo echo $z'
+echo 'echo $z' | ./minishell
+read -n 1 -s
+
+echo 'echo cat auteur'
 echo 'cat auteur' | ./minishell
 read -n 1 -s
 
-echo 'env'
+echo 'echo env'
 echo 'env' | ./minishell
 read -n 1 -s
 
-echo 'setenv a b\nenv'
+echo 'echo setenv a b\necho env'
 echo 'setenv a b\nenv' | ./minishell
 read -n 1 -s
 
-echo 'setenv a a\nenv'
+echo 'echo setenv a a\necho env'
 echo 'setenv a a\nenv' | ./minishell
 read -n 1 -s
 
-echo 'unsetenv a\nenv'
+echo 'echo unsetenv a\necho env'
 echo 'unsetenv a\nenv' | ./minishell
 read -n 1 -s
 
-echo 'setenv b\nenv'
+echo 'echo setenv b\necho env'
 echo 'setenv b\nenv' | ./minishell
 read -n 1 -s
 
-echo 'env -u b\nenv'
+echo 'echo env -u b\necho env'
 echo 'env -u b\nenv' | ./minishell
 read -n 1 -s
 
-echo 'env -i ./minishell\nenv'
-echo 'env -i ./minishell\nenv' | ./minishell
+echo 'echo env -i ./minishell'
+echo 'env -i ./minishell' | ./minishell
 read -n 1 -s
+
+echo 'echo exit'
+echo 'exit' | ./minishell
