@@ -20,11 +20,11 @@ static int		replace_minus(char **paths, char ***env)
 	int		pos;
 	int		nb_minus;
 
-	i = 0;
+	i = -1;
 	nb_minus = 0;
 	pos = 0;
 	oldpwd = NULL;
-	while (paths[i])
+	while (paths[++i])
 	{
 		if (ft_strequ(paths[i], "-"))
 		{
@@ -33,7 +33,6 @@ static int		replace_minus(char **paths, char ***env)
 				pos = replace_minus_bis(env, oldpwd, i, paths);
 			nb_minus++;
 		}
-		i++;
 	}
 	if (pos != 0)
 	{
@@ -92,7 +91,8 @@ t_bool			change_directory(char **cmd, char ***env)
 		cd_home(env);
 	cd_to(cmd);
 	verif_env(env);
-	getcwd(buff, BUFF_S);
+	if (getcwd(buff, BUFF_S) == NULL)
+		return (FALSE);
 	tmp = get_env("PWD", *env);
 	modif_env("OLDPWD", env, tmp);
 	free(tmp);

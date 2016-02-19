@@ -15,4 +15,3 @@ void		print_prompt(char **env)
 		ft_putstr("$> ");
 	free(tmp);
 }
-
