@@ -23,6 +23,7 @@ static int		replace_minus(char **paths, char ***env)
 	i = 0;
 	nb_minus = 0;
 	pos = 0;
+	oldpwd = NULL;
 	while (paths[i])
 	{
 		if (ft_strequ(paths[i], "-"))

@@ -30,7 +30,9 @@ SRC = body.c \
 	lexer.c \
 	main.c \
 	path.c \
-	prompt.c
+	prompt.c \
+	replace_env_var.c \
+	replace_tilde.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 

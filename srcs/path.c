@@ -6,7 +6,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
-static char		**take_path_in_file()
+static char		**take_path_in_file(void)
 {
 	char	buff[BUFF_S];
 	int		ret_read;
@@ -76,9 +76,7 @@ char			*search_exe(char **paths, char *exe)
 			while ((dp = readdir(dir)) != NULL && !b)
 			{
 				if (ft_strequ(dp->d_name, exe))
-				{
 					b = TRUE;
-				}
 			}
 			closedir(dir);
 		}
