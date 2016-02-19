@@ -1,8 +1,7 @@
 #include "minishell.h"
 #include "libft.h"
-
 #include <stdlib.h>
-#include <stdio.h>
+
 static t_bool	format_and_exec_cmd(char **t, char **env)
 {
 	char	*tmp;
@@ -57,9 +56,6 @@ t_bool			body(char ***env)
 		ft_freetstring(&t);
 		return (TRUE);
 	}
-	else
-	{
-		ft_freetstring(&t);
-		return (FALSE);
-	}
+	ft_freetstring(&t);
+	return (FALSE);
 }

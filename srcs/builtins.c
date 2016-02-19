@@ -1,83 +1,34 @@
 #include "minishell.h"
 #include "libft.h"
-#include <stdlib.h>
 
-static t_bool	builtins_exit(char **t, char ***env)
+static void		initptfunc(t_bool	(*tab[6]) (char **, char ***))
 {
-	size_t	i;
-
-	ft_putendl("exit");
-	ft_freetstring(env);
-	i = 0;
-	if (t[1] != NULL)
-	{
-		while (t[1][i])
-		{
-			if (!ft_isdigit(t[1][i]))
-			{
-				ft_putstr("exit: ");
-				ft_putstr(t[1]);
-				ft_putendl(": numeric argument required");
-				exit (255);
-			}
-			i++;
-		}
-		exit (ft_atoi(t[1]));
-	}
-	else
-		exit (0);
-	return (FALSE);
-}
-
-static t_bool	builtins_setenv(char **t, char ***env)
-{
-	int		i;
-
-	i = 0;
-	while (t[i])
-		i++;
-	if (i > 3)
-		return (ft_error(2, "Too many arguments.", NULL, TRUE));
-	if (t[1] != NULL)
-		return (set_env(t[1], env, t[2]));
-	else
-		print_env(*env);
-	return (TRUE);
-}
-
-static t_bool	builtins_unsetenv(char **t, char ***env, int i)
-{
-	while (t[i])
-	{
-		if (env_exist(t[i], *env))
-			del_env(t[i], env);
-		i++;
-	}
-	return (TRUE);
+	tab[0] = &builtins_exit;
+	tab[1] = &builtins_setenv;
+	tab[2] = &builtins_unsetenv;
+	tab[3] = &builtins_env;
+	tab[4] = &change_directory;
 }
 
 t_bool			builtins(char **t, char ***env)
 {
+	t_bool	(*tab[5]) (char **, char ***);
+	char	*(name[5]) = {"exit", "setenv", "unsetenv", "env", "cd"};
+	int		i;
 
-#ifdef DEBUG
-	ft_putendl("DEBUG : builtins");
-#endif
-
-	if (ft_strequ(t[0], "exit"))
-		return (builtins_exit(t, env));
 	if (replace_tilde(t, *env) == FALSE)
 		return (FALSE);
 	if (replace_env_var(t, *env) == FALSE)
 		return (FALSE);
-	else if (ft_strequ(t[0], "cd"))
-		return (change_directory(t, env));
-	else if (ft_strequ(t[0], "setenv"))
-		return (builtins_setenv(t, env));
-	else if (ft_strequ(t[0], "unsetenv"))
-		return (builtins_unsetenv(t, env, 1));
-	else if ((ft_strequ(t[0], "env") && ft_strequ(t[1], "-u")))
-		return (builtins_unsetenv(t, env, 2));
-	else if (ft_strequ(t[0], "env") && ft_strchr(t[1], '-') == NULL)
-		return (builtins_env(*env));
+	initptfunc(tab);
+	i = 0;
+	while (i < 5)
+	{
+		if (ft_strequ(name[i], t[0]))
+			break ;
+		i++;
+	}
+	if (i < 5)
+		return (tab[i](t, env));
 	return (2);
 }

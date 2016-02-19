@@ -2,7 +2,6 @@
 #include "libft.h"
 #include <stdlib.h>
 
-#include <stdio.h>
 size_t		len_to_equal(char *str)
 {
 	size_t	i;
@@ -49,12 +48,6 @@ t_bool	env_exist(char *name, char **env)
 
 char	*get_env(char *name, char **env)
 {
-
-#ifdef DEBUG
-	ft_putstr("DEBUG : get_env : ");
-	ft_putendl(name);
-#endif
-
 	char	*ret;
 	char	*tmp;
 	size_t	i;
@@ -88,12 +81,6 @@ char	*get_env(char *name, char **env)
 
 t_bool	modif_env(char *name, char ***env, char *str)
 {
-
-#ifdef DEBUG
-	ft_putstr("DEBUG : modif_env : ");
-	ft_putendl(name);
-#endif
-
 	char	*tmp;
 	size_t	i;
 	size_t	len;
@@ -142,12 +129,6 @@ t_bool	modif_env(char *name, char ***env, char *str)
 
 t_bool	del_env(char *name, char ***env)
 {
-
-#ifdef DEBUG
-	ft_putstr("DEBUG : del_env : ");
-	ft_putendl(name);
-#endif
-
 	char	*tmp;
 	char	**tmpenv;
 	size_t	i;
@@ -187,12 +168,6 @@ t_bool	del_env(char *name, char ***env)
 
 t_bool	add_env(char *name, char ***env, char *str)
 {
-
-#ifdef DEBUG
-	ft_putstr("DEBUG : add_env : ");
-	ft_putendl(name);
-#endif
-
 	char	**tmpenv;
 	char	*tmp;
 	size_t	nbenv;
@@ -222,12 +197,6 @@ t_bool	add_env(char *name, char ***env, char *str)
 
 t_bool	set_env(char *name, char ***env, char *str)
 {
-
-#ifdef DEBUG
-	ft_putstr("DEBUG : set_env : ");
-	ft_putendl(name);
-#endif
-
 	size_t	i;
 
 	i = 0;
@@ -244,11 +213,6 @@ t_bool	set_env(char *name, char ***env, char *str)
 
 void	print_env(char **env)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : print_env");
-#endif
-
 	size_t	i;
 	size_t	nb;
 

@@ -35,11 +35,6 @@ static int		lstcmdadd(t_lstcmd **alst, char *value)
 
 static char		**lst_to_tstring(t_lstcmd **lst, int nbelem)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : lst_to_string");
-#endif
-
 	t_lstcmd	*tmp;
 	char		**ret;
 	int			i;
@@ -65,11 +60,6 @@ static char		**lst_to_tstring(t_lstcmd **lst, int nbelem)
 
 char			**lexer(char *str, char *sc)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : lexer");
-#endif
-
 	char		tmp[BUFF_S];
 	t_lstcmd	*lst;
 	size_t		i;

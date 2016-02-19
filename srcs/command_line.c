@@ -1,16 +1,10 @@
 #include "libft.h"
 #include "minishell.h"
 #include "get_next_line.h"
-
-#include <stdio.h>
 #include <stdlib.h>
+
 t_bool	readline(char ***t)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : readline");
-#endif
-
 	char	*line;
 	int		ret;
 
@@ -32,11 +26,6 @@ t_bool	readline(char ***t)
 
 t_bool	replace_tilde(char **paths, char **env)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : replace_tilde");
-#endif
-
 	char	*home;
 	char	*tmp1;
 	int		i;

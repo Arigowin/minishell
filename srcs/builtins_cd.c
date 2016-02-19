@@ -3,13 +3,18 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+static int		replace_minus_bis(char ***env, char *oldpwd, int i, char **p)
+{
+	verif_env(env);
+	oldpwd = get_env("OLDPWD", *env);
+	if ((p[i] = ft_strdup(oldpwd)) == NULL)
+		return (ft_error(0, "ERROR : DUP", p[i], FALSE) - 1);
+	free(oldpwd);
+	return (i);
+}
+
 static int		replace_minus(char **paths, char ***env)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : replace_minus");
-#endif
-
 	char	*oldpwd;
 	int		i;
 	int		pos;
@@ -24,14 +29,7 @@ static int		replace_minus(char **paths, char ***env)
 		{
 			ft_strdel(&paths[i]);
 			if (pos == 0)
-			{
-				verif_env(env);
-				oldpwd = get_env("OLDPWD", *env);
-				if ((paths[i] = ft_strdup(oldpwd)) == NULL)
-					return (ft_error(0, "strdup replace_minus", paths[i], FALSE) - 1);
-				pos = i;
-				free(oldpwd);
-			}
+				pos = replace_minus_bis(env, oldpwd, i, paths);
 			nb_minus++;
 		}
 		i++;
@@ -44,13 +42,39 @@ static int		replace_minus(char **paths, char ***env)
 	return (nb_minus);
 }
 
+static t_bool	cd_home(char ***env)
+{
+	char	*tmp;
+
+	if ((tmp = get_env("HOME", *env)) == NULL)
+	{
+		ft_putendl("cd: No home directory.");
+		return (TRUE);
+	}
+	if (chdir(tmp) == -1)
+		return (FALSE);
+	free(tmp);
+	return (TRUE);
+}
+
+static t_bool	cd_to(char **cmd)
+{
+	int		i;
+
+	i = 1;
+	while (cmd[i])
+	{
+		if (access(cmd[i], F_OK))
+			return (ft_error(1, "no such file or directory: ", cmd[i], TRUE));
+		if (chdir(cmd[i]) == -1)
+			return (ft_error(1, "permission denied: ", cmd[i], TRUE));
+		i++;
+	}
+	return (TRUE);
+}
+
 t_bool			change_directory(char **cmd, char ***env)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : change_directory");
-#endif
-
 	int		i;
 	int		nb_minus;
 	char	buff[BUFF_S];
@@ -64,25 +88,8 @@ t_bool			change_directory(char **cmd, char ***env)
 	if ((i - (nb_minus == 0 ? 0 : nb_minus)) > 2)
 		return (ft_error(1, "too many arguments", NULL, TRUE));
 	if (cmd[1] == NULL)
-	{
-		if ((tmp = get_env("HOME", *env)) == NULL)
-		{
-			ft_putendl("cd: No home directory.");
-			return (TRUE);
-		}
-		if (chdir(tmp) == -1)
-			return (FALSE);
-		free(tmp);
-	}
-	i = 1;
-	while (cmd[i])
-	{
-		if (access(cmd[i], F_OK))
-			return (ft_error(1, "no such file or directory: ", cmd[i], TRUE));
-		if (chdir(cmd[i]) == -1)
-			return (ft_error(1, "permission denied: ", cmd[i], TRUE));
-		i++;
-	}
+		cd_home(env);
+	cd_to(cmd);
 	verif_env(env);
 	getcwd(buff, BUFF_S);
 	tmp = get_env("PWD", *env);

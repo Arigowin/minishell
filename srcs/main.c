@@ -33,11 +33,6 @@ void		print_path(char *path, char **env, char *color)
 
 void		verif_env(char ***env)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : verif_env");
-#endif
-
 	char	buff[BUFF_S];
 
 	getcwd(buff, BUFF_S);
@@ -71,8 +66,6 @@ static void	init_start(char ***env, char **env2)
 
 static int	start(char **envarg)
 {
-	ft_putendl("DEBUG : START");
-
 	char		**env;
 	t_bool		b;
 
@@ -85,9 +78,6 @@ static int	start(char **envarg)
 		b = body(&env);
 	}
 	ft_freetstring(&env);
-
-	ft_putendl("DEBUG : END");
-
 	return (b);
 }
 

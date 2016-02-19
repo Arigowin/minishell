@@ -3,11 +3,6 @@
 
 t_bool	ft_error(int i, char *str, char *exe, t_bool ret)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : ft_error");
-#endif
-
 	if (i == 0)
 		ft_putstr_fd("minishell: ", 2);
 	else if (i == 1)

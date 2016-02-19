@@ -12,13 +12,16 @@ HPATH =		$(ROOT)/includes
 LIBPATH =	$(ROOT)/libft
 LIBHPATH =	$(LIBPATH)/includes
 
-CFLAGS = -g -Wall -Werror -Wextra -I $(HPATH) -I $(LIBHPATH)
+CFLAGS = -O3 -Wall -Werror -Wextra -I $(HPATH) -I $(LIBHPATH)
 LIBS = -L $(LIBPATH) -lft
 
 SRC = body.c \
 	builtins.c \
 	builtins_cd.c \
 	builtins_env.c \
+	builtins_exit.c \
+	builtins_setenv.c \
+	builtins_unsetenv.c \
 	command_line.c \
 	env.c \
 	error.c \

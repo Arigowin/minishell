@@ -40,11 +40,6 @@ char			**take_path(char **env)
 
 char			*format_path_exe(char *path, char *cmd)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : format_path_exe");
-#endif
-
 	char	*tmp;
 	char	*ret;
 
@@ -65,11 +60,6 @@ char			*format_path_exe(char *path, char *cmd)
 
 char			*search_exe(char **paths, char *exe)
 {
-
-#ifdef DEBUG
-	ft_putendl("DEBUG : search_exe");
-#endif
-
 	struct dirent	*dp;
 	DIR				*dir;
 	int				i;
