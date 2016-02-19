@@ -35,7 +35,8 @@ void		verif_env(char ***env)
 {
 	char	buff[BUFF_S];
 
-	getcwd(buff, BUFF_S);
+	if (getcwd(buff, BUFF_S) == NULL)
+		exit (-1);
 	if (env_exist("PWD", *env) == FALSE)
 		set_env("PWD", env, buff);
 	if (env_exist("OLDPWD", *env) == FALSE)

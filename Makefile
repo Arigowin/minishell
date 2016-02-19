@@ -23,16 +23,19 @@ SRC = body.c \
 	builtins_setenv.c \
 	builtins_unsetenv.c \
 	command_line.c \
+	del_env.c \
 	env.c \
 	error.c \
 	execprog.c \
 	free.c \
+	get_env.c \
 	lexer.c \
 	main.c \
 	path.c \
 	prompt.c \
 	replace_env_var.c \
-	replace_tilde.c
+	replace_tilde.c \
+	set_env.c
 
 OFILES = $(patsubst %.c, $(OPATH)/%.o, $(SRC))
 
