@@ -6,13 +6,14 @@
 /*   By: dolewski <dolewski@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/02/21 12:47:59 by dolewski          #+#    #+#             */
-/*   Updated: 2016/02/21 12:47:59 by dolewski         ###   ########.fr       */
+/*   Updated: 2016/02/21 16:06:46 by dolewski         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "libft.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 static t_bool	format_and_exec_cmd(char **t, char **env)
 {
