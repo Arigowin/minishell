@@ -39,7 +39,7 @@ t_bool	set_env(char *name, char ***env, char *str)
 		if (!ft_isalnum(name[i]))
 		{
 			return (ft_error(2, "Variable name must contain alphanumeric \
-						characters.", NULL, TRUE));
+characters.", NULL, TRUE));
 		}
 		i++;
 	}
