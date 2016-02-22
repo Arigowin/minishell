@@ -14,27 +14,38 @@
 #include "libft.h"
 #include <stdlib.h>
 
+static t_bool	b_exit2(char **t)
+{
+	size_t		i;
+
+	i = 0;
+	while (t[1][i])
+	{
+		if (!ft_isdigit(t[1][i]))
+		{
+			ft_putstr("exit: ");
+			ft_putstr(t[1]);
+			ft_putendl(": numeric argument required");
+			exit(255);
+		}
+		i++;
+	}
+	exit(ft_atoi(t[1]));
+}
+
 t_bool			builtins_exit(char **t, char ***env)
 {
-	size_t	i;
-
-	ft_putendl("exit");
-	ft_freetstring(env);
-	i = 0;
-	if (t[1] != NULL)
+	if (t[1] != NULL && t[2] == NULL)
 	{
-		while (t[1][i])
-		{
-			if (!ft_isdigit(t[1][i]))
-			{
-				ft_putstr("exit: ");
-				ft_putstr(t[1]);
-				ft_putendl(": numeric argument required");
-				exit(255);
-			}
-			i++;
-		}
-		exit(ft_atoi(t[1]));
+		ft_putendl("exit");
+		ft_freetstring(env);
+	}
+	if (t[1] != NULL && t[2] == NULL)
+		b_exit2(t);
+	else if (t[2] != NULL)
+	{
+		ft_putendl("exit: Expression Syntax.");
+		return (TRUE);
 	}
 	else
 		exit(0);

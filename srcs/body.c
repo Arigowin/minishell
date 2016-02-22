@@ -23,7 +23,7 @@ static t_bool	format_and_exec_cmd(char **t, char **env)
 	int		ret_exec;
 
 	if ((paths = take_path(env)) == NULL)
-		return (ft_error(0, "not PATH found", t[0], TRUE));
+		return (ft_error(0, "PATH not found !", NULL, TRUE));
 	if ((tmp = search_exe(paths, t[0])) == NULL)
 		return (ft_error(0, "command not found: ", t[0], TRUE));
 	ft_freetstring(&paths);
