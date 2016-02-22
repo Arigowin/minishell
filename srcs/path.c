@@ -20,16 +20,17 @@
 
 static char		**take_path_in_file(void)
 {
-	char	buff[BUFF_S];
-	int		ret_read;
-	int		fd;
+	char **path;
 
-	fd = open("/etc/paths", O_RDONLY);
-	ft_bzero(buff, BUFF_S);
-	if ((ret_read = read(fd, buff, BUFF_S)) > 0)
-		return (lexer(buff, "\n"));
-	close(fd);
-	return (NULL);
+	if ((path = (char **)malloc(sizeof(char *) * 6)) == NULL)
+		return (NULL);
+	path[0] = ft_strdup("/usr/local/bin");
+	path[1] = ft_strdup("/usr/bin");
+	path[2] = ft_strdup("/bin");
+	path[3] = ft_strdup("/usr/sbin");
+	path[4] = ft_strdup("/sbin");
+	path[5] = NULL;
+	return (path);
 }
 
 char			**take_path(char **env)
