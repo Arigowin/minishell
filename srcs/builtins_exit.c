@@ -42,7 +42,7 @@ t_bool			builtins_exit(char **t, char ***env)
 	}
 	if (t[1] != NULL && t[2] == NULL)
 		b_exit2(t);
-	else if (t[2] != NULL)
+	else if (t[1] != NULL && t[2] != NULL)
 	{
 		ft_putendl("exit: Expression Syntax.");
 		return (TRUE);
